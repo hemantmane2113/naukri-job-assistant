@@ -352,7 +352,7 @@ _STAGE_1_5_TEST_JOB_URL = (
 )
 
 
-@cli.command("inspect-apply")
+@cli.command("inspect-apply", hidden=True)
 @click.option(
     "--job-url", default=_STAGE_1_5_TEST_JOB_URL, show_default=True,
     help="Job listing URL to open for the controlled post-Apply inspection.",
@@ -389,7 +389,7 @@ def inspect_apply(job_url: str, reuse_session: bool) -> None:
         sys.exit(1)
 
 
-@cli.command("inspect-profile-edit")
+@cli.command("inspect-profile-edit", hidden=True)
 @click.option(
     "--reuse-session", is_flag=True, default=False,
     help="Reuse the persistent browser profile instead of an isolated, disposable one.",
@@ -420,22 +420,7 @@ def inspect_profile_edit(reuse_session: bool, manual_open: bool) -> None:
         sys.exit(1)
 
 
-@cli.command("match")
-def match() -> None:
-    """Run job matching only (Phase 4)."""
-    raise NotImplementedError("match lands in Phase 4 (matching engine).")
-
-
-@cli.command("prepare")
-def prepare() -> None:
-    """REMOVED FROM SCOPE — applications are performed manually."""
-    raise NotImplementedError(
-        "Application submission is out of scope. Applications are manual; use "
-        "`mark-applied` to record one."
-    )
-
-
-@cli.command("apply")
+@cli.command("apply", hidden=True)
 @click.argument("job")
 @click.option(
     "--reuse-session", is_flag=True, default=False,
@@ -481,7 +466,7 @@ def _explain_busy_database(fn):
         raise
 
 
-@cli.command("auto-apply")
+@cli.command("auto-apply", hidden=True)
 def auto_apply_cmd() -> None:
     """
     UNATTENDED: apply to eligible jobs that have a plain Naukri Apply button

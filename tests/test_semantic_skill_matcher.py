@@ -16,7 +16,6 @@ from naukri_agent.matching.models import ExperienceProfile
 from naukri_agent.matching.semantic_skill_matcher import (
     SkillRelationship,
     SkillResolutionItem,
-    TierResolution,
     is_effective_match,
     resolve_deterministic,
     resolve_semantic,

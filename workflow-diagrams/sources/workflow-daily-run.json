@@ -1,0 +1,305 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "Naukri job assistant: the daily run",
+    "animation": "none",
+    "quality_profile": "showcase",
+    "output": "workflow-daily-run.html"
+  },
+  "lanes": [
+    {
+      "id": "sched",
+      "label": "Windows Task Scheduler"
+    },
+    {
+      "id": "site",
+      "label": "Naukri website"
+    },
+    {
+      "id": "ai",
+      "label": "AI model (reads only)"
+    },
+    {
+      "id": "code",
+      "label": "Plain code (decides)"
+    },
+    {
+      "id": "you",
+      "label": "You"
+    }
+  ],
+  "phases": [
+    {
+      "id": "refresh",
+      "label": "09:45 Refresh",
+      "fromCol": 0,
+      "toCol": 0,
+      "variant": "dashed"
+    },
+    {
+      "id": "find",
+      "label": "10:00 Find jobs",
+      "fromCol": 1,
+      "toCol": 2,
+      "variant": "emphasis"
+    },
+    {
+      "id": "judge",
+      "label": "Read and score",
+      "fromCol": 3,
+      "toCol": 3
+    },
+    {
+      "id": "tell",
+      "label": "Tell you and research",
+      "fromCol": 4,
+      "toCol": 5,
+      "variant": "emphasis"
+    }
+  ],
+  "mainPath": [
+    "t2",
+    "srch",
+    "pages",
+    "parse",
+    "score",
+    "digest",
+    "mail"
+  ],
+  "nodes": [
+    {
+      "id": "t1",
+      "lane": "sched",
+      "col": 0,
+      "type": "external",
+      "label": "09:45 task",
+      "sublabel": "refresh profile",
+      "width": 140
+    },
+    {
+      "id": "t2",
+      "lane": "sched",
+      "col": 1,
+      "type": "external",
+      "label": "10:00 task",
+      "sublabel": "run daily job",
+      "width": 140
+    },
+    {
+      "id": "t3",
+      "lane": "sched",
+      "col": 4,
+      "type": "external",
+      "label": "10:05 task",
+      "sublabel": "waits for the digest",
+      "width": 150
+    },
+    {
+      "id": "up",
+      "lane": "site",
+      "col": 0,
+      "type": "cloud",
+      "label": "Upload resume",
+      "sublabel": "next in rotation",
+      "width": 140
+    },
+    {
+      "id": "srch",
+      "lane": "site",
+      "col": 1,
+      "type": "cloud",
+      "label": "Find 50 jobs",
+      "sublabel": "24 searches, new first",
+      "width": 140
+    },
+    {
+      "id": "pages",
+      "lane": "site",
+      "col": 2,
+      "type": "cloud",
+      "label": "Open 50 jobs",
+      "sublabel": "equal share per resume",
+      "width": 150
+    },
+    {
+      "id": "parse",
+      "lane": "ai",
+      "col": 3,
+      "type": "messagebus",
+      "label": "Read each job",
+      "sublabel": "skills, experience, pay",
+      "tag": "cached, 1 retry",
+      "width": 150
+    },
+    {
+      "id": "research",
+      "lane": "ai",
+      "col": 5,
+      "type": "messagebus",
+      "label": "Research company sites",
+      "sublabel": "careers page, route",
+      "tag": "read-only, token budget",
+      "width": 170
+    },
+    {
+      "id": "score",
+      "lane": "code",
+      "col": 3,
+      "type": "backend",
+      "label": "Score 0 to 100",
+      "sublabel": "recency counts, 7 marks",
+      "width": 150
+    },
+    {
+      "id": "digest",
+      "lane": "code",
+      "col": 4,
+      "type": "backend",
+      "label": "Pick the top 10",
+      "sublabel": "80 or more only",
+      "width": 140
+    },
+    {
+      "id": "ping",
+      "lane": "code",
+      "col": 5,
+      "type": "backend",
+      "label": "Telegram ping",
+      "sublabel": "up to 4 ready to apply",
+      "width": 160
+    },
+    {
+      "id": "mail",
+      "lane": "you",
+      "col": 4,
+      "type": "frontend",
+      "label": "Email",
+      "sublabel": "Parts 1, 2 and 3",
+      "width": 140
+    },
+    {
+      "id": "rmail",
+      "lane": "you",
+      "col": 5,
+      "type": "frontend",
+      "label": "Research email",
+      "sublabel": "link, route, flags",
+      "width": 160
+    }
+  ],
+  "edges": [
+    {
+      "id": "t1-up",
+      "from": "t1",
+      "to": "up",
+      "variant": "dashed"
+    },
+    {
+      "id": "up-srch",
+      "from": "up",
+      "to": "srch",
+      "label": "profile first",
+      "variant": "dashed",
+      "role": "branch"
+    },
+    {
+      "id": "t2-srch",
+      "from": "t2",
+      "to": "srch",
+      "variant": "emphasis"
+    },
+    {
+      "id": "srch-pages",
+      "from": "srch",
+      "to": "pages",
+      "label": "7 days, no contract",
+      "variant": "emphasis"
+    },
+    {
+      "id": "pages-parse",
+      "from": "pages",
+      "to": "parse",
+      "variant": "emphasis"
+    },
+    {
+      "id": "parse-score",
+      "from": "parse",
+      "to": "score",
+      "label": "AI never decides",
+      "variant": "security"
+    },
+    {
+      "id": "score-digest",
+      "from": "score",
+      "to": "digest",
+      "variant": "emphasis"
+    },
+    {
+      "id": "digest-mail",
+      "from": "digest",
+      "to": "mail",
+      "variant": "emphasis"
+    },
+    {
+      "id": "digest-ping",
+      "from": "digest",
+      "to": "ping",
+      "label": "then",
+      "role": "branch",
+      "variant": "default"
+    },
+    {
+      "id": "t3-research",
+      "from": "t3",
+      "to": "research",
+      "variant": "dashed"
+    },
+    {
+      "id": "research-rmail",
+      "from": "research",
+      "to": "rmail",
+      "label": "Part 1 jobs",
+      "variant": "dashed"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Finding and scoring jobs",
+      "items": [
+        "Searches go roles first, then cities, at most 24 a run, and only jobs posted in the last 7 days count",
+        "Jobs not seen before are read first; jobs read earlier only fill the gap, so a quiet day is not wasted on repeats",
+        "Skills 35, experience 20, role 15, salary 11, location 7, education 5, posted recently 7; 80 or more is ACCEPT",
+        "Plain code decides; the AI only reads the job text (repeated text in long postings is trimmed first)"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "What the email contains",
+      "items": [
+        "Part 1: up to 6 company-website jobs scoring 80 or more, each with its direct apply link",
+        "Part 2: jobs the app applied to for you on Naukri since the last digest",
+        "Part 3: where recent company-website jobs stand: waiting for your answer, applied, not applied or ignored"
+      ]
+    },
+    {
+      "dot": "violet",
+      "title": "Keeping your phone reachable",
+      "items": [
+        "The listener holds the PC awake 06:00-23:00 so /apply is heard; the guard restarts it within 10 minutes if Windows ended it",
+        "One Daily check message at 10:50: no message means the PC or its internet is down",
+        "A 19:00 reminder if jobs are waiting, and the 20:00 question: did you apply on the company site?"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Safeguards",
+      "items": [
+        "Nothing is applied during the daily run, and the company-site button is never pressed (that marks the job Applied)",
+        "A failed refresh, ping or Excel step never stops the run; short pauses between pages keep the request rate low",
+        "Watchdog alerts you at 10:30 and 15:00 if something broke"
+      ]
+    }
+  ]
+}

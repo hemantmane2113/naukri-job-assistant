@@ -4,9 +4,7 @@ a Yes, and never applies if it cannot be confirmed."""
 
 from __future__ import annotations
 
-from types import SimpleNamespace
 
-from naukri_agent.browser import selectors
 from naukri_agent.browser.models import ResumeUploadResult
 from naukri_agent.browser.profile import ensure_resume
 from naukri_agent.database.base import session_scope

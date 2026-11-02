@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for your interest. naukri-agent is a personal tool that automates one person's own Naukri job search, so changes are
+Thanks for your interest. naukri-job-assistant is a personal tool that automates one person's own Naukri job search, so changes are
 reviewed against a short list of rules that keep it safe. Please read them before you open a pull request.
 
 Please follow the [Code of Conduct](CODE_OF_CONDUCT.md). By contributing you agree that your contribution is released under the

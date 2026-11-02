@@ -48,8 +48,7 @@ from naukri_agent.database.repositories import (
     upsert_job,
 )
 from naukri_agent.jobs.models import JobCreate
-from naukri_agent.jobs.skill_evidence import build_skill_evidence, merged_required_preferred
-from naukri_agent.matching.skill_normalizer import normalize_skill
+from naukri_agent.jobs.skill_evidence import build_skill_evidence
 from naukri_agent.orchestration.discovery import DiscoveryResult
 from naukri_agent.orchestration.pipeline import run_daily_recommendations
 

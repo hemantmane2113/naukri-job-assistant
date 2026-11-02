@@ -25,6 +25,13 @@ has no tagged releases yet, so entries are grouped by date, newest first.
 - A database write waits up to 30 seconds for another writer instead of failing at once.
 - The README was rewritten to describe the system as it is now.
 - Real employer names in comments, tests and notes were replaced with made-up ones.
+- Hidden the developer and legacy commands from `--help` (`apply`, `auto-apply`, `inspect-apply`, `inspect-profile-edit`) and
+  removed the two stubs that only raised `NotImplementedError` (`match`, `prepare`). 20 commands are listed.
+- A lint check (real mistakes only) in CI and an experimental Linux test job; the few unused imports and variables it found
+  were removed.
+- The diagram sources are kept in `workflow-diagrams/sources/` so the pages can be regenerated.
+- The docs now say plainly that the daily profile refresh is off by default and that an older unattended apply mode exists but
+  is not used.
 - The repository was renamed from `Agentic-Job-Search-Application-Automation-System` to `naukri-job-assistant`, because almost
   everything in it is plain code with a person approving each step. The old address redirects; the diagram site moved to
   `https://hemantmane2113.github.io/naukri-job-assistant/`.

@@ -7,7 +7,6 @@ six days from 15 Oct. The task is only started at logon."""
 from __future__ import annotations
 
 import subprocess
-import sys
 
 import pytest
 from click.testing import CliRunner

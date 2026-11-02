@@ -6,7 +6,6 @@ import yaml
 from pydantic import ValidationError
 
 from naukri_agent.resume.registry import (
-    ResumeRegistry,
     check_registry_files,
     compute_file_hash,
     load_resume_registry,

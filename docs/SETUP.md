@@ -1,6 +1,6 @@
 # Setup guide
 
-How to install naukri-agent and configure it for your own Naukri account. Allow about 30 minutes, most of it for the Telegram
+How to install naukri-job-assistant and configure it for your own Naukri account. Allow about 30 minutes, most of it for the Telegram
 bot and the email app password. Every step is optional except the first four; the later ones switch features on.
 
 | Step | Needed for |
@@ -17,7 +17,7 @@ bot and the email app password. Every step is optional except the first four; th
 ## 1. Install
 
 You need **Python 3.12 or newer** and Git. Windows is the primary platform, because the scheduling and keep-awake features use
-Windows Task Scheduler. The scoring, digest and database parts also run on macOS and Linux.
+Windows Task Scheduler. The tests run in CI on Windows; a Linux run is experimental and macOS is untested, so treat them as unsupported.
 
 ```bash
 git clone https://github.com/hemantmane2113/naukri-job-assistant.git

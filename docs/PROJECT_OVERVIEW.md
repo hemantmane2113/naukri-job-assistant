@@ -1,4 +1,4 @@
-﻿# naukri-agent — Project Overview & Study Guide
+﻿# naukri-job-assistant — Project Overview & Study Guide
 
 For anyone reading this codebase for the first time, or coming back after a break: **what the system does, why it is built
 this way, and how the pieces fit**. It describes the system as of October 2026.
@@ -10,7 +10,7 @@ Companions: `README.md` (the front page), `docs/SETUP.md`, `docs/OPERATIONS.md` 
 
 ## 1. What this project is
 
-`naukri-agent` is a personal job-search assistant for Naukri.com. Every day it finds fresh jobs, reads them, scores them against
+`naukri-job-assistant` (its command is `naukri-agent`) is a personal job-search assistant for Naukri.com. Every day it finds fresh jobs, reads them, scores them against
 your profile with plain arithmetic, and tells you about the best ones. It can also **apply to Naukri Apply jobs for you, one job
 at a time, only after you tap Yes on Telegram**. For jobs that apply on the employer's own site it gives you the direct link,
 researches the company, and later asks you on Telegram whether you applied, so the history stays complete.
@@ -83,7 +83,7 @@ src/naukri_agent/
 ├── scheduler/           Optional in-process scheduler
 ├── agents/              profile_answers (answers from your profile, no AI), apply_answer_agent, grounding
 ├── legacy/              Older commands that still work but are not part of the daily flow
-└── cli/                 `naukri-agent <command>` (25 commands)
+└── cli/                 `naukri-agent <command>` (20 listed commands, 4 hidden developer and legacy ones)
 ```
 
 ### The daily flow

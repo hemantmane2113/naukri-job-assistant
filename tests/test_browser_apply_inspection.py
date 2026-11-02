@@ -1020,7 +1020,7 @@ def test_response_capture_never_raises_out_of_the_listener():
     """Even a totally broken response object must not propagate."""
     page, blocker = _armed_blocker_with_allowlist()
     page.simulate_request("POST", APPLY_INIT_URL)
-    resp = page.simulate_response(
+    page.simulate_response(
         "POST", APPLY_INIT_URL,
         status_error=RuntimeError("status boom"),
         headers={"content-type": "application/json"},

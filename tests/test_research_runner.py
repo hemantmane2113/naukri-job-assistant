@@ -6,7 +6,6 @@ import datetime
 import inspect
 import json
 from pathlib import Path
-from types import SimpleNamespace
 
 import pytest
 from click.testing import CliRunner

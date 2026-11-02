@@ -7,7 +7,6 @@ title/company.
 
 from __future__ import annotations
 
-import datetime
 
 from naukri_agent.database.base import session_scope
 from naukri_agent.database.models import (
@@ -25,7 +24,7 @@ from naukri_agent.database.repositories import (
     upsert_application_history,
 )
 
-from .digest_fakes import add_job, in_memory_factory, make_candidate
+from .digest_fakes import add_job, in_memory_factory
 
 
 def test_absence_of_row_is_not_applied():

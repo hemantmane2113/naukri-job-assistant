@@ -208,7 +208,7 @@ def test_an_empty_week_gives_an_empty_report(tmp_path):
 def sample_report(tmp_path):
     with session_scope(in_memory_factory()) as s:
         cand, run = make_candidate(s), make_run(s, started_at=ist(7))
-        a, b = company_job(s, cand, run, 0, 7), company_job(s, cand, run, 1, 8)
+        _a, b = company_job(s, cand, run, 0, 7), company_job(s, cand, run, 1, 8)
         record_followup_answer(s, b, "applied", ignore_after_later=4)
         n = native_job(s, cand, 0)
         ping(s, run, [n])

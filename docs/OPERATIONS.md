@@ -1,6 +1,6 @@
 # Operations guide
 
-How to run naukri-agent day to day: the scheduled tasks, phone control, the weekly report, every command, and the switches and
+How to run the assistant day to day: the scheduled tasks, phone control, the weekly report, every command, and the switches and
 backups worth knowing. For first-time configuration see [SETUP.md](SETUP.md); when something fails see
 [TROUBLESHOOTING.md](TROUBLESHOOTING.md).
 
@@ -10,7 +10,7 @@ Seven tasks do the unattended work. They run while you are signed in to Windows 
 
 | Task name | When | Command | What it does |
 |---|---|---|---|
-| Naukri Agent - Profile Refresh | 09:45 daily | `profile-refresh --execute` | Uploads the next of your resumes so the profile counts as freshly updated |
+| Naukri Agent - Profile Refresh | 09:45 daily | `profile-refresh --execute` | Optional (needs `PROFILE_REFRESH_ENABLED=true`, off by default): uploads the next of your resumes so the profile counts as freshly updated |
 | Naukri Agent - Daily Jobs | 10:00 daily | `run-daily` | Finds, reads and scores jobs; emails the digest; pings Telegram |
 | Naukri Agent - Research | 10:05 daily | `research-jobs --wait-for-digest` | Waits for the digest, then researches the company-website jobs |
 | Naukri Agent - Watchdog | 10:30 and 15:00 | `watchdog` | Silent unless a morning step did not happen |
@@ -150,7 +150,6 @@ status in `RECOMMENDATION_EXCLUDE_IF_STATUS`, is never recommended again; a job 
 | `run-daily` (alias `run-now`) | Discover, read, score, digest, Excel, Telegram ping |
 | `recommend` | The full daily pipeline (use `--dry-run` to write the digest to a file) |
 | `discover` | Read-only discovery only |
-| `match` | Run job matching only |
 | `report` | Re-print the latest digest |
 | `export-excel` | Regenerate the Excel workbook from the database |
 | `applications` | List recorded applications (the authoritative history) |
@@ -164,9 +163,12 @@ status in `RECOMMENDATION_EXCLUDE_IF_STATUS`, is never recommended again; a job 
 | `watchdog` | Check that the morning chain happened (`--dry-run`) |
 | `weekly-report` | Build and email the weekly Excel report |
 | `scheduler` | The in-process daily scheduler (an alternative to Task Scheduler) |
-| `inspect`, `inspect-apply`, `inspect-profile-edit` | One-off read-only inspection tools for developers |
-| `auto-apply` | Unattended apply, off unless `AUTO_APPLY_UNATTENDED=true`; not used |
-| `apply`, `prepare` | Older commands kept but not part of the daily flow |
+| `inspect` | A one-off read-only walkthrough of Naukri's pages, for checking selectors |
+
+Hidden from `--help` but still callable (developer and older tools): `inspect-apply` and `inspect-profile-edit` (read-only
+inspection), `apply` (an older interactive apply) and `auto-apply`. **`auto-apply` can apply without a tap per job**: it needs
+`AUTO_APPLY=true`, `DRY_RUN=false` and `AUTO_APPLY_UNATTENDED=true`, no scheduled task uses it, and this project does not
+recommend it.
 
 ## Switches, backups and housekeeping
 

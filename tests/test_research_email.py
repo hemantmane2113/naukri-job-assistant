@@ -5,7 +5,6 @@ from __future__ import annotations
 import datetime
 import json
 
-import pytest
 from click.testing import CliRunner
 from sqlalchemy.exc import OperationalError
 
@@ -19,7 +18,7 @@ from naukri_agent.research_agent.models import AgentLLMError
 from naukri_agent.research_agent.runner import compose_email, run_research, todays_digest_is_ready, wait_for_digest
 
 from .digest_fakes import in_memory_factory, make_run
-from .test_research_agent import CAREERS, ROLE, FakeSearch, ScriptedClient, call, page, submit, turn
+from .test_research_agent import CAREERS, ROLE, FakeSearch, ScriptedClient, call, page, turn
 from .test_research_runner import NOW, FakeReader, cfg, ok_script, seed
 
 # --- recognising how applying will go ------------------------------------------------------------------------------------

@@ -18,7 +18,7 @@ from __future__ import annotations
 
 import json
 from dataclasses import dataclass
-from typing import Any, Callable
+from typing import Callable
 
 from naukri_agent.research_agent.web import (
     BraveSearch,

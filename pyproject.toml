@@ -41,6 +41,7 @@ Documentation = "https://hemantmane2113.github.io/naukri-job-assistant/"
 dev = [
     "pytest>=8.2",
     "pytest-cov>=5.0",
+    "ruff>=0.6",
 ]
 
 [project.scripts]
@@ -52,6 +53,14 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.ruff]
+line-length = 130
+target-version = "py312"
+
+[tool.ruff.lint]
+# Real mistakes only (syntax errors, unused or undefined names); style is not enforced.
+select = ["E9", "F"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

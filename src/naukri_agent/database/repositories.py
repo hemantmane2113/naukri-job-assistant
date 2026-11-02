@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import datetime
 import logging
+from typing import TYPE_CHECKING
 
 from sqlalchemy.orm import Session
 
@@ -38,6 +39,9 @@ from naukri_agent.jobs.models import (
     extract_external_id,
 )
 from naukri_agent.matching.models import MatchDecision, MatchResult
+
+if TYPE_CHECKING:  # only for annotations; the functions import it when they run
+    from naukri_agent.database.models import AutoApplyAttempt
 from naukri_agent.matching.skill_normalizer import normalize_skill
 from naukri_agent.resume.selector import ResumeSelectionOutcome
 

@@ -17,7 +17,7 @@ from naukri_agent.database.models import ApplicationHistory, AutoApplyAttempt
 from .browser_fakes import FakePage
 from .test_auto_apply_interactive import FakeHuman, go
 from .test_auto_apply_runner import FakeClient, _patch_profile, cfg, run, seed  # noqa: F401 - autouse fixture
-from .test_telegram import JOB, World, button, interaction, text
+from .test_telegram import World, button, interaction, text
 
 # Structure copied from the live capture (long ids/URLs shortened).
 REAL_BODY = {

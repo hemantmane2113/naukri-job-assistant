@@ -1,0 +1,258 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "Naukri job assistant: how an application happens",
+    "animation": "none",
+    "quality_profile": "showcase",
+    "output": "workflow-apply-flow.html"
+  },
+  "lanes": [
+    {
+      "id": "code",
+      "label": "Plain code"
+    },
+    {
+      "id": "research",
+      "label": "Research agent (reads only)"
+    },
+    {
+      "id": "you",
+      "label": "You"
+    },
+    {
+      "id": "site",
+      "label": "Websites and database"
+    }
+  ],
+  "phases": [
+    {
+      "id": "choose",
+      "label": "Choose and tell you",
+      "fromCol": 0,
+      "toCol": 2
+    },
+    {
+      "id": "decide",
+      "label": "You decide",
+      "fromCol": 3,
+      "toCol": 3,
+      "variant": "emphasis"
+    },
+    {
+      "id": "apply",
+      "label": "Apply on Naukri",
+      "fromCol": 4,
+      "toCol": 5,
+      "variant": "dashed"
+    }
+  ],
+  "mainPath": [
+    "pick",
+    "ping",
+    "card",
+    "yes",
+    "resume",
+    "q",
+    "rec"
+  ],
+  "nodes": [
+    {
+      "id": "pick",
+      "lane": "code",
+      "col": 0,
+      "type": "backend",
+      "label": "Pick the top 10",
+      "sublabel": "80 or more, by apply type",
+      "width": 160
+    },
+    {
+      "id": "r1",
+      "lane": "research",
+      "col": 1,
+      "type": "messagebus",
+      "label": "Part 1: company site",
+      "sublabel": "research, link by email, you apply",
+      "tag": "8 PM: did you apply?",
+      "width": 210
+    },
+    {
+      "id": "ping",
+      "lane": "code",
+      "col": 1,
+      "type": "backend",
+      "label": "Part 2: ping",
+      "sublabel": "up to 4 a day, you send /apply",
+      "width": 170
+    },
+    {
+      "id": "card",
+      "lane": "you",
+      "col": 2,
+      "type": "frontend",
+      "label": "Job card",
+      "sublabel": "one card, one job",
+      "width": 150
+    },
+    {
+      "id": "yes",
+      "lane": "you",
+      "col": 3,
+      "type": "security",
+      "label": "Your Yes?",
+      "sublabel": "silence means no",
+      "width": 140
+    },
+    {
+      "id": "stopA",
+      "lane": "code",
+      "col": 4,
+      "type": "security",
+      "label": "Skipped",
+      "sublabel": "profile untouched",
+      "width": 140
+    },
+    {
+      "id": "resume",
+      "lane": "site",
+      "col": 4,
+      "type": "cloud",
+      "label": "Resume, then Apply",
+      "sublabel": "fresh browser if it changes",
+      "width": 180
+    },
+    {
+      "id": "q",
+      "lane": "you",
+      "col": 5,
+      "type": "frontend",
+      "label": "One question at a time",
+      "sublabel": "only what the form asks",
+      "width": 180
+    },
+    {
+      "id": "stopB",
+      "lane": "code",
+      "col": 5,
+      "type": "security",
+      "label": "Handed back",
+      "sublabel": "you finish by hand",
+      "width": 150
+    },
+    {
+      "id": "rec",
+      "lane": "site",
+      "col": 5,
+      "type": "database",
+      "label": "Record result",
+      "sublabel": "after Naukri shows Applied",
+      "width": 190
+    }
+  ],
+  "edges": [
+    {
+      "id": "pick-ping",
+      "from": "pick",
+      "to": "ping",
+      "label": "Naukri Apply",
+      "variant": "emphasis"
+    },
+    {
+      "id": "pick-r1",
+      "from": "pick",
+      "to": "r1",
+      "label": "company site",
+      "role": "branch",
+      "variant": "dashed"
+    },
+    {
+      "id": "ping-card",
+      "from": "ping",
+      "to": "card",
+      "variant": "emphasis"
+    },
+    {
+      "id": "card-yes",
+      "from": "card",
+      "to": "yes",
+      "variant": "emphasis"
+    },
+    {
+      "id": "yes-resume",
+      "from": "yes",
+      "to": "resume",
+      "label": "Yes",
+      "variant": "emphasis"
+    },
+    {
+      "id": "yes-stopA",
+      "from": "yes",
+      "to": "stopA",
+      "label": "No or silence",
+      "role": "error",
+      "variant": "security"
+    },
+    {
+      "id": "resume-q",
+      "from": "resume",
+      "to": "q",
+      "label": "form asks",
+      "variant": "emphasis"
+    },
+    {
+      "id": "q-stopB",
+      "from": "q",
+      "to": "stopB",
+      "label": "unexpected form",
+      "role": "error",
+      "variant": "security"
+    },
+    {
+      "id": "q-rec",
+      "from": "q",
+      "to": "rec",
+      "label": "Applied shows",
+      "variant": "emphasis"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "If it is Part 1: company site",
+      "items": [
+        "The digest and the research email show the employer's direct apply link, read from the job data Naukri's page loads",
+        "You apply yourself. At 8 PM, or when you send /applied, Telegram asks: Applied, Not applying or Later",
+        "Applied is recorded as applied through company website. Not applying, and the 4th Later in a row, are never suggested again"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "If it is Part 2: Naukri Apply through Telegram",
+      "items": [
+        "A Telegram ping lists the jobs that are ready; send /apply from your phone to start (the listener keeps the PC awake 06:00-23:00; a 19:00 reminder if jobs wait)",
+        "Nothing is applied without your Yes tap on that job; no reply in 20 minutes means no",
+        "Every button belongs to one card, and a tap is answered within seconds: Applying... please wait, or No - skipped",
+        "The right resume is set and checked first (a fresh browser if it has to change), then Apply is clicked"
+      ]
+    },
+    {
+      "dot": "violet",
+      "title": "How the questions work",
+      "items": [
+        "Naukri's data may list seven questions, but its form asks only what it cannot fill from your profile or earlier tries, so you are asked only the question on screen",
+        "Choices are taps; a typed answer gets a quick Yes/No before it is sent; answers go in at Naukri's pace",
+        "If the form closes while you think, it is reopened and your answer sent; anything unexpected sends nothing and hands the job back with a screenshot saved"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Rules for both",
+      "items": [
+        "At most 10 jobs a day, all scoring 80 or more; contract and temporary jobs are never listed",
+        "The Apply on company site button is never pressed: Naukri marks the job Applied when it is",
+        "At most 4 applications per rolling 24 hours; it counts as applied only when Naukri shows Applied",
+        "Part 3 of the digest and the Sunday Excel report show where every job stands"
+      ]
+    }
+  ]
+}

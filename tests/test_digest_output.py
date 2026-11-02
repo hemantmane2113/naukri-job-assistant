@@ -240,7 +240,7 @@ def test_excel_is_regenerated_entirely_from_db(tmp_path):
         )
         res1 = export_workbook(s, path, cfg)
         content1 = _sheet_contents(path)
-        res2 = export_workbook(s, path, cfg)
+        export_workbook(s, path, cfg)
         content2 = _sheet_contents(path)
 
     assert res1.jobs_rows == 2 and res1.applications_rows == 1 and res1.daily_runs_rows == 1

@@ -15,5 +15,16 @@ connection are needed. Small preview pictures are in `previews/`.
 
 The system map, the hour-by-hour day and the safety rails are on `docs/architecture.html`.
 
-These pages were made with the Archify diagram tool and edited to match the code. They can be out of date after a change
-to the app, so the code is the truth. Last updated 2026-10-27.
+## How they are made
+
+The pages were generated with the [Archify](https://github.com/tt-a1i/archify) diagram tool from the JSON files in
+`sources/`. To change one, edit its JSON and regenerate it (Node.js and Archify installed):
+
+```bash
+node path/to/archify/bin/archify.mjs finalize workflow sources/workflow-daily-run.json workflow-daily-run.html --quality showcase
+```
+
+Two pages have no source file: `workflow-weekly-report.html` (its source was not kept) and `docs/architecture.html`, which is
+a hand-edited page. Edit those directly.
+
+These pages can be out of date after a change to the app, so the code is the truth. Last updated 2026-11-02.

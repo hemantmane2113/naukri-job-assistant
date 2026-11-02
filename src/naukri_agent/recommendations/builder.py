@@ -34,7 +34,6 @@ from naukri_agent.database.models import (
     ApplicationStatus,
     Job,
     JobExtraction,
-    MatchDecision,
 )
 from naukri_agent.database.repositories import (
     application_status_for_job,

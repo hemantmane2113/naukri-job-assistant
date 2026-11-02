@@ -1,0 +1,264 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "Naukri job assistant: keeping your phone reachable",
+    "animation": "none",
+    "quality_profile": "showcase",
+    "output": "workflow-phone-reachability.html"
+  },
+  "lanes": [
+    {
+      "id": "sched",
+      "label": "Windows and Task Scheduler"
+    },
+    {
+      "id": "code",
+      "label": "Phone listener (plain code)"
+    },
+    {
+      "id": "you",
+      "label": "You on Telegram"
+    }
+  ],
+  "phases": [
+    {
+      "id": "start",
+      "label": "Start and restart",
+      "fromCol": 0,
+      "toCol": 3,
+      "variant": "emphasis"
+    },
+    {
+      "id": "talk",
+      "label": "Talk to you",
+      "fromCol": 4,
+      "toCol": 5,
+      "variant": "dashed"
+    }
+  ],
+  "mainPath": [
+    "t1",
+    "l1",
+    "y2"
+  ],
+  "nodes": [
+    {
+      "id": "t1",
+      "lane": "sched",
+      "col": 0,
+      "type": "external",
+      "label": "At logon",
+      "sublabel": "Phone Control task",
+      "width": 140
+    },
+    {
+      "id": "t3",
+      "lane": "sched",
+      "col": 3,
+      "type": "external",
+      "label": "Scheduled commands",
+      "sublabel": "each checks first",
+      "width": 170
+    },
+    {
+      "id": "w1",
+      "lane": "sched",
+      "col": 1,
+      "type": "security",
+      "label": "Sleep or Wi-Fi blip",
+      "sublabel": "Windows ends the task",
+      "width": 160
+    },
+    {
+      "id": "t2",
+      "lane": "sched",
+      "col": 5,
+      "type": "external",
+      "label": "Phone guard",
+      "sublabel": "every 10 min, 06:00-23:00",
+      "width": 170
+    },
+    {
+      "id": "l1",
+      "lane": "code",
+      "col": 2,
+      "type": "backend",
+      "label": "Phone listener",
+      "sublabel": "always on, PC kept awake 06:00-23:00",
+      "width": 220
+    },
+    {
+      "id": "ap",
+      "lane": "code",
+      "col": 4,
+      "type": "backend",
+      "label": "Starts the apply run",
+      "sublabel": "still needs your Yes tap",
+      "width": 170
+    },
+    {
+      "id": "y1",
+      "lane": "you",
+      "col": 1,
+      "type": "frontend",
+      "label": "19:00 reminder",
+      "sublabel": "if jobs are waiting",
+      "width": 150
+    },
+    {
+      "id": "y2",
+      "lane": "you",
+      "col": 2,
+      "type": "frontend",
+      "label": "20:00 question",
+      "sublabel": "did you apply?",
+      "width": 150
+    },
+    {
+      "id": "y3",
+      "lane": "you",
+      "col": 3,
+      "type": "frontend",
+      "label": "You send /apply",
+      "sublabel": "or /applied, /status",
+      "width": 150
+    },
+    {
+      "id": "y4",
+      "lane": "you",
+      "col": 5,
+      "type": "frontend",
+      "label": "Daily check 10:50",
+      "sublabel": "no message = PC is down",
+      "width": 170
+    },
+    {
+      "id": "r1",
+      "lane": "sched",
+      "col": 4,
+      "type": "external",
+      "label": "Restart check",
+      "sublabel": "starts the task if stopped",
+      "width": 170
+    }
+  ],
+  "edges": [
+    {
+      "id": "t1-l1",
+      "from": "t1",
+      "to": "l1",
+      "label": "starts at logon",
+      "variant": "emphasis"
+    },
+    {
+      "id": "w1-l1",
+      "from": "w1",
+      "to": "l1",
+      "label": "ends it",
+      "variant": "security",
+      "role": "error"
+    },
+    {
+      "id": "t2-y4",
+      "from": "t2",
+      "to": "y4",
+      "label": "one message a day",
+      "variant": "dashed",
+      "role": "branch"
+    },
+    {
+      "id": "l1-y1",
+      "from": "l1",
+      "to": "y1",
+      "label": "sends",
+      "variant": "emphasis"
+    },
+    {
+      "id": "l1-y2",
+      "from": "l1",
+      "to": "y2",
+      "label": "sends",
+      "variant": "emphasis"
+    },
+    {
+      "id": "y3-l1",
+      "from": "y3",
+      "to": "l1",
+      "label": "hears you",
+      "variant": "emphasis",
+      "role": "branch"
+    },
+    {
+      "id": "l1-ap",
+      "from": "l1",
+      "to": "ap",
+      "label": "/apply",
+      "variant": "dashed",
+      "role": "branch"
+    },
+    {
+      "id": "t3-r1",
+      "from": "t3",
+      "to": "r1",
+      "label": "before each run",
+      "variant": "dashed",
+      "role": "branch"
+    },
+    {
+      "id": "t2-r1",
+      "from": "t2",
+      "to": "r1",
+      "label": "every 10 min",
+      "variant": "dashed",
+      "role": "branch"
+    },
+    {
+      "id": "r1-l1",
+      "from": "r1",
+      "to": "l1",
+      "label": "starts it again",
+      "variant": "emphasis",
+      "role": "branch"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "Why this exists",
+      "items": [
+        "A sleeping PC cannot hear Telegram, and a PC woken by a task goes back to sleep as soon as the task ends",
+        "Windows ends the listener's task whenever the PC sleeps or the network blips, and nothing started it again",
+        "You are often away for weeks, so nobody is at the PC to notice"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "What keeps it reachable",
+      "items": [
+        "The listener holds the PC awake from 06:00 to 23:00",
+        "The phone guard checks every 10 minutes and starts the listener again if it is not running",
+        "Every scheduled command (refresh, daily run, research, weekly report) and the watchdog check first, and the watchdog tells you",
+        "The task no longer waits for a network, so a Wi-Fi blip does not end it"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "How you know it works",
+      "items": [
+        "One Daily check message at 10:50: the PC is on and listening",
+        "No message means the PC is off or has no internet; nothing on the PC can tell you that",
+        "The 19:00 reminder comes only when jobs are waiting, and the 20:00 question only when a company-website job is unanswered"
+      ]
+    },
+    {
+      "dot": "violet",
+      "title": "What it cannot do",
+      "items": [
+        "A PC that is shut down cannot be woken by any task; leave it on, or switch it on before you leave",
+        "The listener only starts the apply run; every job still waits for your Yes tap, and silence means no",
+        "It obeys only your own Telegram chat; an /apply older than 10 minutes is ignored"
+      ]
+    }
+  ]
+}

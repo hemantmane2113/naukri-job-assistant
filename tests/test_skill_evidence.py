@@ -15,7 +15,6 @@ from naukri_agent.jobs.skill_evidence import (
     TIER_DETERMINISTIC_MARKER,
     TIER_LLM,
     TIER_WEAK_DEFAULT,
-    MergedSkillEvidence,
     SkillEvidence,
     build_skill_evidence,
     classify_skill_sentence,

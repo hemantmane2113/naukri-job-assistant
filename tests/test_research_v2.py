@@ -18,7 +18,7 @@ from naukri_agent.research_agent.runner import ResearchOutcome, ResearchRunResul
 from naukri_agent.research_agent.tools import ToolBox
 
 from .digest_fakes import in_memory_factory
-from .test_research_agent import BRIEF, CAREERS, JOB, ROLE, ScriptedClient, call, make_box, page, submit, turn
+from .test_research_agent import BRIEF, CAREERS, JOB, ScriptedClient, call, make_box, page, submit, turn
 from .test_research_runner import NOW, cfg, seed
 
 # --- differences from the Naukri post ---------------------------------------------------------------------------------

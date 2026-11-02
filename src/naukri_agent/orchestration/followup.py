@@ -20,9 +20,8 @@ from __future__ import annotations
 import datetime
 import json
 import logging
-import time
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any
 from zoneinfo import ZoneInfo
 
 from sqlalchemy.exc import OperationalError
@@ -94,7 +93,7 @@ def _confirmation(outcome: str, count: int, ignore_after: int) -> str:
     if outcome == "ignored":
         return f"Recorded: ignored. You said Later {count} times in a row, so you will not see this job again."
     if count == ignore_after - 1:
-        return f"Okay, later. Last time I will ask: one more Later and I will ignore this job for good."
+        return "Okay, later. Last time I will ask: one more Later and I will ignore this job for good."
     return "Okay, I will ask again later."
 
 

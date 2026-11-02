@@ -71,7 +71,7 @@ def explain_match(
         f"Overall match score: {match_result.overall_score} / 100 "
         f"({match_result.decision.value})\n"
         f"Positive factors:\n- " + "\n- ".join(reasons or ["(none)"]) + "\n"
-        f"Gaps:\n- " + "\n- ".join(gaps or ["(none)"]) + "\n\n"
+        "Gaps:\n- " + "\n- ".join(gaps or ["(none)"]) + "\n\n"
         "Write the 1-2 sentence summary."
     )
 

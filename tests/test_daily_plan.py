@@ -10,7 +10,7 @@ import pytest
 from naukri_agent.browser.pacing import pause
 from naukri_agent.config import Settings
 from naukri_agent.database.base import session_scope
-from naukri_agent.database.models import AutoApplyAttempt, Job
+from naukri_agent.database.models import Job
 from naukri_agent.database.repositories import add_auto_apply_attempt
 from naukri_agent.orchestration import discovery as discovery_mod
 from naukri_agent.orchestration.pipeline import run_daily_recommendations
@@ -105,7 +105,7 @@ def test_the_list_size_can_be_set_directly_on_the_digest_builder():
     f = in_memory_factory()
     c = settings(__import__("pathlib").Path("."), threshold_review=0, threshold_accept=0, recommendation_cooldown_days=0)
     with session_scope(f) as s:
-        cand, run = make_candidate(s), make_run(s)
+        cand, _run = make_candidate(s), make_run(s)
         ids = []
         for i in range(5):
             j = add_job(s, slug=f"j{i}", ext=f"04092610{i:04d}")

@@ -1,4 +1,4 @@
-﻿# naukri-agent: project context for Claude Code
+﻿# naukri-job-assistant: project context for Claude Code (the command is `naukri-agent`)
 
 Read automatically at the start of every session. It states what the project is, the rules that must never be broken, how the
 code is laid out, and how to work with this user. For the full picture see `docs/PROJECT_OVERVIEW.md`; for setup, `README.md`.
@@ -142,7 +142,7 @@ message (10:50) by `phone-guard`.
 ## Testing
 
 Three tiers: unit; mocked-browser (`test_browser_*.py`, no real browser); manual (`pytest -m manual`, excluded by default). Run
-`pytest` before calling a change done. Currently **1773 passed, 3 deselected**. A fix for a live bug gets a test built from the
+`pytest` before calling a change done. Also run `ruff check src tests` (real mistakes only; CI runs it too). Currently **1773 passed, 3 deselected**. A fix for a live bug gets a test built from the
 real shape that failed (see `tests/test_choice_questions.py` for the Globex panel).
 
 ## Working style the user expects

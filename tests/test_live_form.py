@@ -13,7 +13,7 @@ import pytest
 
 from naukri_agent.browser import selectors
 from naukri_agent.browser.apply_workflow import ApplyAnswerError, ApplyWorkflowSession, FormChanged
-from naukri_agent.browser.models import ApplyQuestionPrompt, LiveQuestion
+from naukri_agent.browser.models import LiveQuestion
 from naukri_agent.browser.naukri_client import NaukriClient
 from naukri_agent.config import Settings
 from naukri_agent.orchestration.auto_apply_runner import MAX_LIVE_QUESTIONS, PARKED_NEEDS_HUMAN

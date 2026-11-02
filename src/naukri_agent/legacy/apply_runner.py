@@ -29,7 +29,7 @@ from __future__ import annotations
 
 import logging
 import uuid
-from typing import Any, Callable
+from typing import Callable
 
 from pydantic import BaseModel
 

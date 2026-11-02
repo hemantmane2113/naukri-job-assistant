@@ -31,7 +31,6 @@ import contextlib
 import datetime
 import json
 import logging
-import re
 import time
 import uuid
 from contextlib import contextmanager

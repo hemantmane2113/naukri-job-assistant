@@ -95,6 +95,7 @@ applies to nothing and sends no email. The full walkthrough, with your profile, 
 | [docs/SETUP.md](docs/SETUP.md) | Installing, configuring your profile and resumes, Telegram, email and the AI models |
 | [docs/OPERATIONS.md](docs/OPERATIONS.md) | Scheduled tasks, phone control, the weekly report, commands, pause switches and backups |
 | [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md) | `doctor`, where the logs and failure evidence are, and the problems seen so far |
+| [docs/SAMPLES.md](docs/SAMPLES.md) | What the digest email, the Telegram card and the daily check look like |
 | [docs/PROJECT_OVERVIEW.md](docs/PROJECT_OVERVIEW.md) | The design, the architecture, how applying works and where to look when something breaks |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | How to set up for development, the rules the code follows and how to submit a change |
 | [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) | How we expect people to treat each other here |
@@ -114,7 +115,7 @@ applies to nothing and sends no email. The full walkthrough, with your profile, 
 | `naukri-agent mark-applied <job>` | Record an application you made yourself |
 | `naukri-agent weekly-report` | Build and email the weekly Excel report |
 
-All 26 commands are listed in [docs/OPERATIONS.md](docs/OPERATIONS.md).
+All 20 commands are listed in [docs/OPERATIONS.md](docs/OPERATIONS.md); sample messages and output are in [docs/SAMPLES.md](docs/SAMPLES.md).
 
 ## Project layout
 
@@ -133,7 +134,7 @@ src/naukri_agent/
   notifications/       email (file, console, SMTP), Telegram
   reporting/           the Excel mirror and the weekly report
   cli/                 the `naukri-agent` command
-tests/                 about 1,800 tests; no real browser or network needed
+tests/                 1,700+ tests; no real browser or network needed
 docs/  workflow-diagrams/   guides and the interactive diagrams
 ```
 
@@ -162,13 +163,22 @@ Stated plainly, so nobody is surprised:
 - **It depends on Naukri's pages.** A site change can break a selector. All of them live in one file, marked VERIFIED
   (with a date) or UNVERIFIED.
 - **A shut-down PC cannot run anything.** The guard and the daily check exist so you notice.
+- **An older unattended mode still exists in the code.** The hidden command `naukri-agent auto-apply` can apply without a tap
+  per job. It is off unless three settings are changed (`AUTO_APPLY=true`, `DRY_RUN=false`, `AUTO_APPLY_UNATTENDED=true`),
+  it is not part of any scheduled task, and this project does not use it. It does not follow the "a human approves every
+  application" rule, which applies to everything the documentation describes.
+- **Windows is the tested platform.** CI runs the tests on Windows. A Linux job runs too, but it is experimental and its
+  result has not been established; macOS is untested.
 
 ## Responsible use
 
 This project automates your own Naukri account for your own job search. Automated access may be restricted by Naukri's terms
 of service, and you are responsible for using it in line with them. It deliberately avoids anything that would evade a site's
 protections: it never solves a CAPTCHA, never works around MFA or rate limits, and never presses "Apply on company site"
-(Naukri marks the job as applied when that button is pressed). It is not affiliated with or endorsed by Naukri.com or Info Edge.
+(Naukri marks the job as applied when that button is pressed). Its pauses between pages exist to keep the request rate low.
+The daily profile refresh, which re-uploads one of your resumes so the profile shows as recently updated, is **off by default**
+(`PROFILE_REFRESH_ENABLED=false`); decide for yourself whether you want it, since some platforms dislike that practice.
+It is not affiliated with or endorsed by Naukri.com or Info Edge.
 
 ## Contributing and license
 

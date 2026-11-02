@@ -4,7 +4,6 @@ reached the freshness gate and the daily cap; Data Analyst and AI/ML jobs were n
 
 from __future__ import annotations
 
-import pytest
 
 from naukri_agent.database.base import session_scope
 from naukri_agent.database.models import RunEvent
