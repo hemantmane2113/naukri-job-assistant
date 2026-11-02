@@ -1,6 +1,6 @@
-# naukri-agent
+# naukri-job-assistant
 
-[![Tests](https://github.com/hemantmane2113/Agentic-Job-Search-Application-Automation-System/actions/workflows/tests.yml/badge.svg)](https://github.com/hemantmane2113/Agentic-Job-Search-Application-Automation-System/actions/workflows/tests.yml)
+[![Tests](https://github.com/hemantmane2113/naukri-job-assistant/actions/workflows/tests.yml/badge.svg)](https://github.com/hemantmane2113/naukri-job-assistant/actions/workflows/tests.yml)
 ![Python 3.12+](https://img.shields.io/badge/python-3.12%2B-blue)
 ![License: MIT](https://img.shields.io/badge/license-MIT-green)
 ![Platform: Windows first](https://img.shields.io/badge/platform-Windows%20first-lightgrey)
@@ -10,6 +10,8 @@ them with plain code against your profile, emails you a digest, and tells your p
 It applies only after you tap Yes on Telegram, one job at a time.**
 
 > The AI reads. Plain code decides. A human approves every application.
+
+The command-line tool is called `naukri-agent`; the Python package is `naukri_agent`.
 
 ## What it does
 
@@ -36,9 +38,9 @@ links or the pictures.)
 
 | | |
 |---|---|
-| [![System map](workflow-diagrams/previews/architecture.png)](https://hemantmane2113.github.io/Agentic-Job-Search-Application-Automation-System/docs/architecture.html)<br>**[System map](https://hemantmane2113.github.io/Agentic-Job-Search-Application-Automation-System/docs/architecture.html)**<br>The parts, a day hour by hour, safety rails, what is stored | [![The daily run](workflow-diagrams/previews/daily-run.png)](https://hemantmane2113.github.io/Agentic-Job-Search-Application-Automation-System/workflow-diagrams/workflow-daily-run.html)<br>**[The daily run](https://hemantmane2113.github.io/Agentic-Job-Search-Application-Automation-System/workflow-diagrams/workflow-daily-run.html)**<br>Finding, reading, scoring and telling you |
-| [![How an application happens](workflow-diagrams/previews/apply-flow.png)](https://hemantmane2113.github.io/Agentic-Job-Search-Application-Automation-System/workflow-diagrams/workflow-apply-flow.html)<br>**[How an application happens](https://hemantmane2113.github.io/Agentic-Job-Search-Application-Automation-System/workflow-diagrams/workflow-apply-flow.html)**<br>Your Yes tap, the right resume, the form's questions | [![Keeping your phone reachable](workflow-diagrams/previews/phone-reachability.png)](https://hemantmane2113.github.io/Agentic-Job-Search-Application-Automation-System/workflow-diagrams/workflow-phone-reachability.html)<br>**[Keeping your phone reachable](https://hemantmane2113.github.io/Agentic-Job-Search-Application-Automation-System/workflow-diagrams/workflow-phone-reachability.html)**<br>Listener, guard, Daily check, reminders |
-| [![The Sunday weekly report](workflow-diagrams/previews/weekly-report.png)](https://hemantmane2113.github.io/Agentic-Job-Search-Application-Automation-System/workflow-diagrams/workflow-weekly-report.html)<br>**[The Sunday weekly report](https://hemantmane2113.github.io/Agentic-Job-Search-Application-Automation-System/workflow-diagrams/workflow-weekly-report.html)**<br>The weekly Excel report | |
+| [![System map](workflow-diagrams/previews/architecture.png)](https://hemantmane2113.github.io/naukri-job-assistant/docs/architecture.html)<br>**[System map](https://hemantmane2113.github.io/naukri-job-assistant/docs/architecture.html)**<br>The parts, a day hour by hour, safety rails, what is stored | [![The daily run](workflow-diagrams/previews/daily-run.png)](https://hemantmane2113.github.io/naukri-job-assistant/workflow-diagrams/workflow-daily-run.html)<br>**[The daily run](https://hemantmane2113.github.io/naukri-job-assistant/workflow-diagrams/workflow-daily-run.html)**<br>Finding, reading, scoring and telling you |
+| [![How an application happens](workflow-diagrams/previews/apply-flow.png)](https://hemantmane2113.github.io/naukri-job-assistant/workflow-diagrams/workflow-apply-flow.html)<br>**[How an application happens](https://hemantmane2113.github.io/naukri-job-assistant/workflow-diagrams/workflow-apply-flow.html)**<br>Your Yes tap, the right resume, the form's questions | [![Keeping your phone reachable](workflow-diagrams/previews/phone-reachability.png)](https://hemantmane2113.github.io/naukri-job-assistant/workflow-diagrams/workflow-phone-reachability.html)<br>**[Keeping your phone reachable](https://hemantmane2113.github.io/naukri-job-assistant/workflow-diagrams/workflow-phone-reachability.html)**<br>Listener, guard, Daily check, reminders |
+| [![The Sunday weekly report](workflow-diagrams/previews/weekly-report.png)](https://hemantmane2113.github.io/naukri-job-assistant/workflow-diagrams/workflow-weekly-report.html)<br>**[The Sunday weekly report](https://hemantmane2113.github.io/naukri-job-assistant/workflow-diagrams/workflow-weekly-report.html)**<br>The weekly Excel report | |
 
 ## A day in its life
 
@@ -71,8 +73,8 @@ You need **Python 3.12+**, a Naukri account, and [Ollama](https://ollama.com) ru
 Windows is the primary platform: the scheduling and keep-awake features use Windows Task Scheduler.
 
 ```bash
-git clone https://github.com/hemantmane2113/Agentic-Job-Search-Application-Automation-System.git
-cd Agentic-Job-Search-Application-Automation-System
+git clone https://github.com/hemantmane2113/naukri-job-assistant.git
+cd naukri-job-assistant
 python -m venv .venv
 .venv\Scripts\activate            # macOS/Linux: source .venv/bin/activate
 pip install -e ".[dev]"

@@ -20,8 +20,8 @@ You need **Python 3.12 or newer** and Git. Windows is the primary platform, beca
 Windows Task Scheduler. The scoring, digest and database parts also run on macOS and Linux.
 
 ```bash
-git clone https://github.com/hemantmane2113/Agentic-Job-Search-Application-Automation-System.git
-cd Agentic-Job-Search-Application-Automation-System
+git clone https://github.com/hemantmane2113/naukri-job-assistant.git
+cd naukri-job-assistant
 python -m venv .venv
 .venv\Scripts\activate            # macOS/Linux: source .venv/bin/activate
 pip install -e ".[dev]"

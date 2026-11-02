@@ -1,7 +1,7 @@
 [project]
 name = "naukri-agent"
 version = "0.1.0"
-description = "Agentic job-search and application-assistance system for Naukri.com"
+description = "A personal job-search assistant for Naukri.com: scores jobs with plain code and applies only with your approval"
 requires-python = ">=3.12"
 readme = "README.md"
 license = { text = "MIT" }
@@ -33,9 +33,9 @@ dependencies = [
 ]
 
 [project.urls]
-Repository = "https://github.com/hemantmane2113/Agentic-Job-Search-Application-Automation-System"
-Issues = "https://github.com/hemantmane2113/Agentic-Job-Search-Application-Automation-System/issues"
-Documentation = "https://hemantmane2113.github.io/Agentic-Job-Search-Application-Automation-System/"
+Repository = "https://github.com/hemantmane2113/naukri-job-assistant"
+Issues = "https://github.com/hemantmane2113/naukri-job-assistant/issues"
+Documentation = "https://hemantmane2113.github.io/naukri-job-assistant/"
 
 [project.optional-dependencies]
 dev = [

@@ -30,8 +30,8 @@ These are enforced by tests or by review. A change that breaks one will not be m
 ## Set up for development
 
 ```bash
-git clone https://github.com/hemantmane2113/Agentic-Job-Search-Application-Automation-System.git
-cd Agentic-Job-Search-Application-Automation-System
+git clone https://github.com/hemantmane2113/naukri-job-assistant.git
+cd naukri-job-assistant
 python -m venv .venv
 .venv\Scripts\activate            # macOS/Linux: source .venv/bin/activate
 pip install -e ".[dev]"

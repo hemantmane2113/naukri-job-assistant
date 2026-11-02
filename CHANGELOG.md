@@ -25,6 +25,9 @@ has no tagged releases yet, so entries are grouped by date, newest first.
 - A database write waits up to 30 seconds for another writer instead of failing at once.
 - The README was rewritten to describe the system as it is now.
 - Real employer names in comments, tests and notes were replaced with made-up ones.
+- The repository was renamed from `Agentic-Job-Search-Application-Automation-System` to `naukri-job-assistant`, because almost
+  everything in it is plain code with a person approving each step. The old address redirects; the diagram site moved to
+  `https://hemantmane2113.github.io/naukri-job-assistant/`.
 
 ### Fixed
 - Answers typed into questions Naukri never asked, which lost an answer or ended in Naukri's own error page.

@@ -52,7 +52,7 @@ _REVIVE_PHONE_CONTROL_COMMANDS = frozenset({"profile-refresh", "run-daily", "res
 @click.group()
 @click.pass_context
 def cli(ctx: click.Context) -> None:
-    """Agentic job-search and application-assistance system for Naukri.com."""
+    """A personal job-search assistant for Naukri.com."""
     if ctx.invoked_subcommand in _REVIVE_PHONE_CONTROL_COMMANDS:
         try:
             from naukri_agent.orchestration.phone_control import ensure_phone_control_running

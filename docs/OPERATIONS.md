@@ -24,7 +24,7 @@ Each task runs the installed console script, with the project folder as its work
 `.env`, `data/`, `logs/`, `out/` and `config/` are found relative to it, and a wrong one silently falls back to defaults.
 
 ```powershell
-$project = "C:\path\to\Agentic-Job-Search-Application-Automation-System"   # your project folder
+$project = "C:\path\to\naukri-job-assistant"   # your project folder
 $action = New-ScheduledTaskAction `
   -Execute "$project\.venv\Scripts\naukri-agent.exe" `
   -Argument "run-daily" `
