@@ -17,7 +17,7 @@ bot and the email app password. Every step is optional except the first four; th
 ## 1. Install
 
 You need **Python 3.12 or newer** and Git. Windows is the primary platform, because the scheduling and keep-awake features use
-Windows Task Scheduler. The tests run in CI on Windows; a Linux run is experimental and macOS is untested, so treat them as unsupported.
+Windows Task Scheduler. The tests and a lint check run in CI on Windows, and the test suite also passed on Linux; the scheduling and keep-awake features are Windows-only and macOS is untested.
 
 ```bash
 git clone https://github.com/hemantmane2113/naukri-job-assistant.git

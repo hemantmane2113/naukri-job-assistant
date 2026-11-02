@@ -167,8 +167,8 @@ Stated plainly, so nobody is surprised:
   per job. It is off unless three settings are changed (`AUTO_APPLY=true`, `DRY_RUN=false`, `AUTO_APPLY_UNATTENDED=true`),
   it is not part of any scheduled task, and this project does not use it. It does not follow the "a human approves every
   application" rule, which applies to everything the documentation describes.
-- **Windows is the tested platform.** CI runs the tests on Windows. A Linux job runs too, but it is experimental and its
-  result has not been established; macOS is untested.
+- **Windows is the supported platform.** CI runs the tests and the lint check on Windows. The test suite also passed on Linux
+  (Ubuntu, Python 3.12) in CI, but the scheduling and keep-awake features are Windows-only and macOS is untested.
 
 ## Responsible use
 
