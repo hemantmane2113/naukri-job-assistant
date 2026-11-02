@@ -4,6 +4,8 @@ on:
   push:
     branches: [main]
   pull_request:
+  schedule:
+    - cron: "17 5 * * 1"   # Mondays: also try the newest allowed dependencies (see the last job)
 
 permissions:
   contents: read
@@ -11,6 +13,8 @@ permissions:
 jobs:
   pytest:
     # The project targets Windows (Task Scheduler, keep-awake), so this is the job that must pass.
+    # It installs the exact versions pinned in requirements-dev.lock, so a run means the same thing every time.
+    if: github.event_name != 'schedule'
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
@@ -18,9 +22,11 @@ jobs:
         with:
           python-version: "3.12"
           cache: pip
-          cache-dependency-path: pyproject.toml
-      - name: Install
-        run: python -m pip install -e ".[dev]"
+          cache-dependency-path: requirements-dev.lock
+      - name: Install the locked dependencies
+        run: |
+          python -m pip install -r requirements-dev.lock
+          python -m pip install --no-deps -e .
       - name: Lint (real mistakes only)
         run: python -m ruff check src tests
       - name: Run the tests
@@ -29,6 +35,7 @@ jobs:
 
   pytest-linux:
     # Experimental: shows whether the code and tests also work on Linux. A failure here does not fail the build.
+    if: github.event_name != 'schedule'
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
@@ -37,8 +44,25 @@ jobs:
         with:
           python-version: "3.12"
           cache: pip
-          cache-dependency-path: pyproject.toml
-      - name: Install
+          cache-dependency-path: requirements-dev.lock
+      - name: Install the locked dependencies
+        run: |
+          python -m pip install -r requirements-dev.lock
+          python -m pip install --no-deps -e .
+      - name: Run the tests
+        run: python -m pytest -q
+
+  pytest-latest-dependencies:
+    # Weekly early warning: do the tests still pass with the newest versions that pyproject.toml allows?
+    # If this fails, a new release of a dependency broke something; refresh and review the lock files.
+    if: github.event_name == 'schedule'
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install the newest allowed dependencies
         run: python -m pip install -e ".[dev]"
       - name: Run the tests
         run: python -m pytest -q

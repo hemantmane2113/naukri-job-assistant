@@ -42,6 +42,29 @@ pytest
 The default test run uses fake browser pages and needs no network, credentials or Naukri account. Tests marked `manual` (under
 `tests/manual/`) need a real account and are excluded unless you run `pytest -m manual`.
 
+## Dependencies
+
+`pyproject.toml` says which versions are allowed; `requirements.lock` (to run) and `requirements-dev.lock` (to develop) pin the
+exact versions that were tested, for Python 3.12 and newer on Windows, Linux and macOS. CI installs from `requirements-dev.lock`,
+and a weekly CI run also tries the newest allowed versions, so a broken new release shows up early.
+
+To reproduce the tested environment exactly:
+
+```bash
+python -m pip install -r requirements-dev.lock
+python -m pip install --no-deps -e .
+```
+
+To refresh the pins after changing `pyproject.toml` or to pick up newer versions (needs [uv](https://docs.astral.sh/uv/)):
+
+```bash
+uv pip compile pyproject.toml --python-version 3.12 --universal --annotation-style line -o requirements.lock
+uv pip compile pyproject.toml --extra dev --python-version 3.12 --universal --annotation-style line -o requirements-dev.lock
+```
+
+Put the three comment lines back at the top of each file (copy them from the old one), run the whole test suite, and commit the
+lock files together with the change that needed them.
+
 ## Making a change
 
 1. **Open an issue first** for anything that changes behaviour, so the design can be agreed before code is written.

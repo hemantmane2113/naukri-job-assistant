@@ -28,6 +28,16 @@ pip install -e ".[dev]"
 playwright install chromium       # one-time download of the browser the app drives
 ```
 
+**Want exactly the versions the project is tested with?** Install from the lock file instead of the last line above:
+
+```bash
+python -m pip install -r requirements.lock
+python -m pip install --no-deps -e .
+```
+
+(`requirements-dev.lock` also pins the test and lint tools.) The plain `pip install -e ".[dev]"` takes the newest versions
+`pyproject.toml` allows, which is fine for trying it out.
+
 ## 2. The environment file
 
 ```bash

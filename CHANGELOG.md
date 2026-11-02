@@ -27,6 +27,9 @@ has no tagged releases yet, so entries are grouped by date, newest first.
 - Real employer names in comments, tests and notes were replaced with made-up ones.
 - Hidden the developer and legacy commands from `--help` (`apply`, `auto-apply`, `inspect-apply`, `inspect-profile-edit`) and
   removed the two stubs that only raised `NotImplementedError` (`match`, `prepare`). 20 commands are listed.
+- Pinned dependencies (`requirements.lock`, `requirements-dev.lock`, for Python 3.12+ on any platform); CI installs from them and
+  a weekly run also tries the newest allowed versions.
+- Test setup now closes the SQLite connections each test opens, which removes about 575 "unclosed database" warnings.
 - A lint check (real mistakes only) in CI and an experimental Linux test job; the few unused imports and variables it found
   were removed.
 - The diagram sources are kept in `workflow-diagrams/sources/` so the pages can be regenerated.
