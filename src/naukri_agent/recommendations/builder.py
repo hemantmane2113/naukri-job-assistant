@@ -24,7 +24,7 @@ row per kept item.
 from __future__ import annotations
 
 import datetime
-from typing import overload
+from typing import Any, overload
 import logging
 import re
 
@@ -486,7 +486,7 @@ def company_site_status_since(
         if job is None or job.apply_type != "company_site":
             continue
         row = session.query(ApplicationHistory).filter_by(job_id=canon).one_or_none()
-        base = dict(
+        base: dict[str, Any] = dict(
             job_title=job.title, company=job.company, location=job.location, job_url=job.url,
             direct_link=job.apply_redirect_url,
         )
@@ -498,6 +498,7 @@ def company_site_status_since(
                 later_count=prompt.later_count if prompt is not None else 0,
             ))
             continue
+        assert row is not None  # no row means NOT_APPLIED, which continued above
         stamp = row.applied_at or row.updated_at
         if status == ApplicationStatus.NOT_APPLYING:
             state = "not_applied"

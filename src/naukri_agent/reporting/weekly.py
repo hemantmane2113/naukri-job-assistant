@@ -132,6 +132,7 @@ def _company_status(session: Session, job_id: int) -> tuple[str, str, datetime.d
         prompt = session.query(FollowupPrompt).filter_by(job_id=job_id).one_or_none()
         later = f" (put off {prompt.later_count}x)" if prompt is not None and prompt.later_count else ""
         return "waiting for your answer" + later, _YELLOW, None
+    assert row is not None  # no row means NOT_APPLIED, which returned above
     when = row.applied_at or row.updated_at
     label = application_label(row)
     colour = _GREEN if status == ApplicationStatus.APPLIED else _GREY if status in (ApplicationStatus.NOT_APPLYING, ApplicationStatus.IGNORED) else _GREEN
@@ -204,9 +205,9 @@ def collect_week(session: Session, settings: Settings, monday: datetime.date, su
             continue
         match = session.query(JobMatch).filter_by(job_id=canon).order_by(JobMatch.matched_at.desc()).first()
         sel = session.query(ResumeSelection).filter_by(job_id=canon).order_by(ResumeSelection.selected_at.desc()).first()
-        rec = rec_of.get(canon)
-        score = rec.score_at_email if rec is not None else (match.overall_score if match else None)
-        resume = (rec.resume_id_at_email if rec is not None else None) or (sel.resume_id if sel else None)
+        recommended = rec_of.get(canon)
+        score = recommended.score_at_email if recommended is not None else (match.overall_score if match else None)
+        resume = (recommended.resume_id_at_email if recommended is not None else None) or (sel.resume_id if sel else None)
         # The route is the job's real type, not which email it happened to be in (older digests listed every job).
         if job.apply_type == "native":
             route = ROUTE_TELEGRAM

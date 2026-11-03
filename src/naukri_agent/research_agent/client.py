@@ -39,8 +39,8 @@ class GroqChatClient:
             try:
                 response = self._client.chat.completions.create(
                     model=self.model,
-                    messages=messages,
-                    tools=tools,
+                    messages=messages,  # type: ignore[arg-type]  # plain dicts; groq wants its own TypedDict types
+                    tools=tools,  # type: ignore[arg-type]
                     tool_choice=tool_choice,
                     temperature=0,
                     max_tokens=self._max_tokens,

@@ -756,6 +756,7 @@ def record_followup_answer(
         )
         session.flush()
         return "not_applying", prompt.later_count if prompt is not None else 0
+    assert prompt is not None  # a missing counter row was created above for "later"
     prompt.later_count += 1
     if prompt.later_count >= ignore_after_later:
         upsert_application_history(
