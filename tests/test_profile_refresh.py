@@ -274,3 +274,70 @@ def test_cli_exits_nonzero_when_the_refresh_did_not_succeed(monkeypatch):
         lambda settings, execute=False, notify=None: SimpleNamespace(outcome="needs_human", model_dump_json=lambda indent=2: "{}"),
     )
     assert CliRunner().invoke(cli_main.cli, ["profile-refresh", "--execute"]).exit_code == 1
+
+
+# --- a slow profile page (3 Nov: Naukri showed grey placeholders past the old 15 s wait and the apply run stopped) -----------
+
+
+class SlowProfilePage:
+    """A profile page whose sections do not appear until it has been reloaded `reloads_needed` times."""
+
+    def __init__(self, reloads_needed, before="old_resume.pdf", after="data_scientist.pdf"):
+        self.reloads_needed, self.reloads = reloads_needed, 0
+        self.before, self.after, self.uploaded = before, after, False
+        self.timeouts, self.calls = [], []
+
+    def goto(self, url, **_):
+        self.calls.append("goto")
+
+    def wait_for_load_state(self, *_a, **_k):
+        pass
+
+    def wait_for_timeout(self, _ms):
+        pass
+
+    def reload(self):
+        self.reloads += 1
+        self.calls.append("reload")
+
+    def wait_for_selector(self, selector, state=None, timeout=None):
+        self.timeouts.append(timeout)
+        if self.reloads < self.reloads_needed:
+            raise TimeoutError(f"Page.wait_for_selector: Timeout {timeout}ms exceeded.")
+
+    def set_input_files(self, selector, path):
+        self.calls.append("set_input_files")
+        self.uploaded = True
+
+    def query_selector(self, selector):
+        text = {selectors.RESUME_FILENAME: self.after if self.uploaded else self.before,
+                selectors.RESUME_LAST_UPDATED: "Updated today"}.get(selector)
+        return SimpleNamespace(inner_text=lambda: text) if text else None
+
+
+def test_a_profile_page_stuck_half_loaded_is_reloaded_once_and_the_upload_goes_ahead(tmp_path):
+    f = tmp_path / "data_scientist.pdf"
+    f.write_bytes(b"x")
+    page = SlowProfilePage(reloads_needed=1)
+    res = upload_resume(page, f)
+    assert res.verified is True
+    assert page.calls.index("reload") < page.calls.index("set_input_files")  # reloaded BEFORE it changed anything
+
+
+def test_a_profile_page_that_never_loads_still_fails_after_just_one_extra_reload(tmp_path):
+    f = tmp_path / "data_scientist.pdf"
+    f.write_bytes(b"x")
+    page = SlowProfilePage(reloads_needed=99)
+    with pytest.raises(TimeoutError):
+        upload_resume(page, f)
+    assert page.reloads == 1 and "set_input_files" not in page.calls  # nothing was uploaded
+
+
+def test_the_profile_page_gets_45_seconds_per_wait_not_15(tmp_path):
+    from naukri_agent.browser import profile
+
+    f = tmp_path / "data_scientist.pdf"
+    f.write_bytes(b"x")
+    page = SlowProfilePage(reloads_needed=0)
+    upload_resume(page, f)
+    assert profile._PROFILE_WAIT_MS == 45000 and set(page.timeouts) == {45000}

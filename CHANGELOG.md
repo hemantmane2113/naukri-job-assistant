@@ -46,6 +46,9 @@ has no tagged releases yet, so entries are grouped by date, newest first.
   `https://hemantmane2113.github.io/naukri-job-assistant/`.
 
 ### Fixed
+- A slow Naukri profile page no longer stops an apply run: the wait for the profile's sections is 45 seconds instead of 15, and a
+  page stuck half-loaded is reloaded once before giving up. (3 Nov: the 15-second wait timed out while putting the right resume on
+  the profile, after the Yes tap, and ended the run before anything was applied.)
 - Answers typed into questions Naukri never asked, which lost an answer or ended in Naukri's own error page.
 - A phone listener that stayed dead after the PC slept, so `/apply` went unheard for days.
 

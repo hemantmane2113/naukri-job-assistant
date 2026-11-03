@@ -45,7 +45,22 @@ def _is_present(page: Any, selector: str) -> bool:
 
 
 _UPLOAD_SETTLE_MS = 8000
-_FILENAME_WAIT_MS = 15000
+# How long to wait for a part of the profile page to appear. Naukri's profile page is sometimes slow and shows grey placeholders
+# for a long while (3 Nov: 15 s was too short, a resume change timed out and stopped the apply run), so be patient.
+_PROFILE_WAIT_MS = 45000
+
+
+def _wait_for_section(page: Any, selector: str) -> None:
+    """Wait for a part of the profile page. A page stuck half-loaded often recovers on a reload, so if the part has not
+    appeared, reload ONCE and wait again; the original timeout error is raised if it is still missing."""
+    try:
+        page.wait_for_selector(selector, state="attached", timeout=_PROFILE_WAIT_MS)
+        return
+    except Exception as exc:  # noqa: BLE001 - the retry below decides
+        logger.info("profile page: %r did not appear in %d s (%s); reloading once", selector, _PROFILE_WAIT_MS // 1000, type(exc).__name__)
+    page.reload()
+    page.wait_for_load_state("domcontentloaded", timeout=30000)
+    page.wait_for_selector(selector, state="attached", timeout=_PROFILE_WAIT_MS)
 
 
 def _norm(name: str | None) -> str:
@@ -68,7 +83,7 @@ def upload_resume(page: Any, path: Any) -> ResumeUploadResult:
     file_path = Path(path)
     page.goto(selectors.PROFILE_URL)
     page.wait_for_load_state("domcontentloaded", timeout=30000)
-    page.wait_for_selector(selectors.RESUME_UPLOAD_BUTTON, state="attached", timeout=_FILENAME_WAIT_MS)
+    _wait_for_section(page, selectors.RESUME_UPLOAD_BUTTON)
     before_name, before_updated = _read_resume_section(page)
 
     page.set_input_files(selectors.RESUME_UPLOAD_BUTTON, str(file_path))
@@ -77,7 +92,7 @@ def upload_resume(page: Any, path: Any) -> ResumeUploadResult:
     page.reload()
     page.wait_for_load_state("domcontentloaded", timeout=30000)
     try:
-        page.wait_for_selector(selectors.RESUME_FILENAME, state="attached", timeout=_FILENAME_WAIT_MS)
+        _wait_for_section(page, selectors.RESUME_FILENAME)
     except Exception as exc:  # noqa: BLE001 - reported below as unverified
         logger.debug("resume filename not visible after reload: %s", exc)
     after_name, after_updated = _read_resume_section(page)
@@ -103,7 +118,7 @@ def ensure_resume(page: Any, path: Any) -> ResumeUploadResult:
     page.goto(selectors.PROFILE_URL)
     page.wait_for_load_state("domcontentloaded", timeout=30000)
     try:
-        page.wait_for_selector(selectors.RESUME_FILENAME, state="attached", timeout=_FILENAME_WAIT_MS)
+        page.wait_for_selector(selectors.RESUME_FILENAME, state="attached", timeout=_PROFILE_WAIT_MS)
     except Exception as exc:  # noqa: BLE001 - fall through: upload_resume reports what it sees
         logger.debug("resume filename not visible before check: %s", exc)
     name, updated = _read_resume_section(page)

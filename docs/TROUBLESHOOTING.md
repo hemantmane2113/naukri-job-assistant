@@ -51,6 +51,11 @@ following the Apply click. If neither is found it records "unconfirmed" and stop
 went through, then record it with `naukri-agent mark-applied <job>`. Read the failure screenshot and `_form.json` to see which
 question the form asked.
 
+**A resume change timed out ("Page.wait_for_selector: Timeout ... exceeded").**
+Naukri's profile page is sometimes slow and shows grey placeholders. The app waits up to 45 seconds for each part of the page and
+reloads it once before giving up. If it still fails, nothing was applied (this happens before the Apply click); send `/apply` again
+later. The failure screenshot in `inspection_output/auto_apply/` shows what the page looked like.
+
 **The form asked something the app did not expect.**
 It sends nothing and hands the job back to you, with a screenshot saved. Anything already sent is kept by Naukri, so applying
 by hand asks only what is left. A new question type should be reported as an issue (see below) with the saved files.

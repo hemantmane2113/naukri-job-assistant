@@ -136,6 +136,9 @@ message (10:50) by `phone-guard`.
   the resume UPLOAD (21 Oct: Contoso Talent's resume change failed; the log shows `BLOCKED ... filevalidation.naukri.com/file`). So before
   a resume change in a session that has already opened a form, the runner starts a fresh browser (`session_armed`). A resume change
   that cannot be confirmed saves `<attempt>_resume.png/.html` and says what Naukri's profile showed.
+- **Naukri's profile page can be very slow** (3 Nov: grey placeholders past a 15 s wait ended an apply run right after the Yes tap).
+  `browser/profile.py` waits `_PROFILE_WAIT_MS` (45 s) per section and reloads once (`_wait_for_section`) before the upload; keep the
+  reload BEFORE anything is changed on the profile.
 - **One Chrome profile, one command at a time.** `BrowserManager.launch` takes `browser/profile_lock.py`'s file lock and waits its
   turn; do not open the persistent profile any other way.
 - **Errors report only the exception type** everywhere except the local log file, where `safe_error_text` also writes the class
@@ -146,7 +149,7 @@ message (10:50) by `phone-guard`.
 ## Testing
 
 Three tiers: unit; mocked-browser (`test_browser_*.py`, no real browser); manual (`pytest -m manual`, excluded by default). Run
-`pytest` before calling a change done. Also run `ruff check src tests` (real mistakes only) and `python -m mypy` (must report no issues); CI runs both. Currently **1775 passed, 3 deselected**. A fix for a live bug gets a test built from the
+`pytest` before calling a change done. Also run `ruff check src tests` (real mistakes only) and `python -m mypy` (must report no issues); CI runs both. Currently **1778 passed, 3 deselected**. A fix for a live bug gets a test built from the
 real shape that failed (see `tests/test_choice_questions.py` for the Globex panel).
 
 ## Working style the user expects
