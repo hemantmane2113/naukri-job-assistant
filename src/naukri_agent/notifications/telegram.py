@@ -245,7 +245,7 @@ class TelegramChannel:
                     self._answer_cb(cb, "Already handled - use the newest message.")
 
     def _wait(
-        self, timeout_s: float, accept: Callable[[str, str], Any],
+        self, timeout_s: float, accept: Callable[[str, Any], Any],
         ack: Callable[[Any], tuple[str, str]] | None = None,
     ) -> Any:
         deadline = self._clock() + timeout_s
@@ -296,7 +296,7 @@ class TelegramChannel:
 
         return ack
 
-    def _yes_no_accept(self, prompt_id: str | None) -> Callable[[str, str], bool | None]:
+    def _yes_no_accept(self, prompt_id: str | None) -> Callable[[str, Any], bool | None]:
         warned: list[int] = []
 
         def accept(kind: str, value: str) -> bool | None:

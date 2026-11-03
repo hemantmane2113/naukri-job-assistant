@@ -43,7 +43,7 @@ def is_excluded(text: str | None, enabled: bool = True, title: str | None = None
     kind = classify_employment(text)
     if kind == EXCLUDED:
         return True
-    return kind == UNCONFIRMED and bool(title) and bool(_EXCLUDE.search(title))
+    return kind == UNCONFIRMED and title is not None and bool(title) and bool(_EXCLUDE.search(title))
 
 
 def describe(text: str | None) -> str:

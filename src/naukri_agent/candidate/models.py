@@ -17,6 +17,8 @@ from pathlib import Path
 import yaml
 from pydantic import BaseModel, EmailStr, Field, field_validator, model_validator
 
+from naukri_agent.errors import ConfigFileNotFound
+
 
 class WorkMode(str, enum.Enum):
     REMOTE = "remote"
@@ -101,7 +103,7 @@ def load_candidate_profile(path: str | Path) -> CandidateProfile:
     """
     path = Path(path)
     if not path.exists():
-        raise FileNotFoundError(
+        raise ConfigFileNotFound(
             f"Candidate profile not found at {path}. Copy "
             "config/candidate_profile.example.yaml to that path and "
             "fill in your own details."

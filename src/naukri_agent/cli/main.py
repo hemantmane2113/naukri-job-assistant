@@ -18,6 +18,7 @@ import click
 
 from naukri_agent.config import get_settings
 from naukri_agent.database.base import init_db
+from naukri_agent.errors import ConfigFileNotFound
 from naukri_agent.logging_config import setup_logging
 from naukri_agent.candidate.models import load_candidate_profile
 from naukri_agent.resume.models import load_master_resume
@@ -852,7 +853,13 @@ def main() -> None:
         sys.exit(1)
 
     setup_logging(settings)
-    cli()
+    try:
+        cli()
+    except ConfigFileNotFound as exc:
+        # The message names the file and says how to create it; a traceback would only bury it.
+        click.echo(f"naukri-agent: {exc}", err=True)
+        click.echo("Run `naukri-agent doctor` to see everything that still needs setting up.", err=True)
+        sys.exit(1)
 
 
 # The console-script entry point in pyproject.toml points at `main`,

@@ -16,6 +16,7 @@ changed, and nothing here is invented: a status is what the records say.
 from __future__ import annotations
 
 import datetime
+from typing import overload
 import logging
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -108,6 +109,10 @@ def _utc_naive(local_date: datetime.date, tz: ZoneInfo) -> datetime.datetime:
     return midnight.astimezone(datetime.UTC).replace(tzinfo=None)
 
 
+@overload
+def _local_date(moment: datetime.datetime, tz: ZoneInfo) -> datetime.date: ...
+@overload
+def _local_date(moment: datetime.datetime | None, tz: ZoneInfo) -> datetime.date | None: ...
 def _local_date(moment: datetime.datetime | None, tz: ZoneInfo) -> datetime.date | None:
     if moment is None:
         return None
@@ -341,6 +346,6 @@ def run_weekly_report(
 
         subject, body = email_text(report)
         (sender or build_email_sender(settings)).send(
-            EmailMessage(subject=subject, text_body=body, attachments=[str(report.path.resolve())])
+            EmailMessage(subject=subject, text_body=body, attachments=[str(report.path.resolve())] if report.path is not None else [])
         )
     return report

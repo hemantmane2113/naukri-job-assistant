@@ -10,6 +10,7 @@ submitted, and your profile, resume and contact details are never sent to the mo
 from __future__ import annotations
 
 import datetime
+import functools
 import logging
 from typing import Any, Callable
 
@@ -134,6 +135,10 @@ def format_report(job: dict, report: ResearchReport) -> str:
     return "\n".join(lines)[:3500]
 
 
+def _read_company_page(reader: Any, job: dict) -> dict:
+    return reader.read(job["url"])
+
+
 def _with_direct_link(report: ResearchReport, reader: Any, job: dict, settings: Settings) -> ResearchReport:
     """Add the employer's own job address, read from the job data Naukri's page loads (nothing is pressed). Whatever
     goes wrong is reduced to a note: a missing link must never lose the rest of the research."""
@@ -233,11 +238,11 @@ def run_research(
     *,
     session_factory: Any = None,
     chat_client: Any = None,
-    search: BraveSearch | None | str = "auto",
+    search: BraveSearch | SerperSearch | None | str = "auto",
     fetch: Callable[[str], Any] | None = None,
     reader: Any = None,
     notify: Callable[[str], None] | None = None,
-    email: Callable[[str, str], None] | None = None,
+    email: Callable[[str, str], object] | None = None,
     fetch_raw_fn: Callable[[str], tuple[str, str]] | None = None,
     now: datetime.datetime | None = None,
     max_jobs: int | None = None,
@@ -256,9 +261,8 @@ def run_research(
         from naukri_agent.research_agent.client import GroqChatClient
 
         chat_client = GroqChatClient(settings.groq_api_key, settings.research_llm_model, timeout=settings.research_llm_timeout_seconds)
-    if search == "auto":
-        search = build_search(settings)
-    if search is None:
+    search_tool = build_search(settings) if isinstance(search, str) else search  # the string is "auto"
+    if search_tool is None:
         result.notes.append(
             "no search key is set (SERPER_API_KEY or BRAVE_API_KEY): the agent cannot search the web; "
             "it can only use Naukri's company page and pages it guesses, so expect weaker results"
@@ -292,47 +296,48 @@ def run_research(
                 deferred.append(f"{job['title']} - {job['company']}")
                 continue
             box = ToolBox(
-                job=job, limits=limits, search=search, fetch=fetch_fn,
-                read_company=(lambda j=job: reader.read(j["url"])),
+                job=job, limits=limits, search=search_tool, fetch=fetch_fn,
+                read_company=functools.partial(_read_company_page, reader, job),
             )
             brief = f"{job['title']} at {job['company']}, {job['location']}."
             res = run_agent(chat_client, box, brief, max_steps=settings.research_max_steps, compact=settings.research_compact_history)
-            ok = res.report is not None
+            report = res.report
+            ok = report is not None
             spent = res.prompt_tokens + res.completion_tokens
             used_tokens += spent
             biggest_job = max(biggest_job, spent)
-            if ok:  # worked out by code from the careers page itself, never by the model
+            if report is not None:  # worked out by code from the careers page itself, never by the model
                 method = detect_apply_method(
-                    [res.report.careers_url] + [c.url for c in res.report.apply_candidates], raw_fn
+                    [u for u in [report.careers_url, *(c.url for c in report.apply_candidates)] if u], raw_fn
                 )
                 if method is not None:
-                    res.report = res.report.model_copy(
+                    report = report.model_copy(
                         update={"apply_method": method.name or None, "apply_note": method.note, "find_by_title": method.thin_page}
                     )
-            if ok and settings.research_read_direct_link and hasattr(reader, "direct_apply_link"):
-                res.report = _with_direct_link(res.report, reader, job, settings)
+            if report is not None and settings.research_read_direct_link and hasattr(reader, "direct_apply_link"):
+                report = _with_direct_link(report, reader, job, settings)
             outcome = ResearchOutcome(
                 job_id=job["job_id"], title=job["title"], company=job["company"],
                 status="ok" if ok else "failed", error=res.error, steps=res.steps,
                 prompt_tokens=res.prompt_tokens, completion_tokens=res.completion_tokens,
-                message=format_report(job, res.report) if ok else None,
+                message=format_report(job, report) if report is not None else None,
             )
             result.outcomes.append(outcome)
             result.researched += ok
             result.failed += not ok
-            if ok:
-                email_entries.append(format_email_entry(len(email_entries) + 1, job, res.report))
+            if report is not None:
+                email_entries.append(format_email_entry(len(email_entries) + 1, job, report))
             else:
                 email_failed.append(f"{job['title']} - {job['company']} ({(res.error or 'unknown')[:60]})")
             if not dry_run:
                 with session_scope(factory) as s:
                     add_job_research(
                         s, job_id=job["job_id"], status=outcome.status, model=getattr(chat_client, "model", "unknown"),
-                        report_json=res.report.model_dump_json() if ok else None, error=res.error,
+                        report_json=report.model_dump_json() if report is not None else None, error=res.error,
                         steps=res.steps, prompt_tokens=res.prompt_tokens, completion_tokens=res.completion_tokens,
                         created_at=now,
                     )
-                if ok and notify is not None:
+                if outcome.message is not None and notify is not None:
                     try:
                         notify(outcome.message)
                     except Exception as exc:  # noqa: BLE001 - the report is saved; sending is a courtesy

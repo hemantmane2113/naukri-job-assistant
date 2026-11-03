@@ -24,6 +24,7 @@ row per kept item.
 from __future__ import annotations
 
 import datetime
+from typing import overload
 import logging
 import re
 
@@ -60,6 +61,10 @@ logger = logging.getLogger(__name__)
 _DATE_FMT = "%d %b %Y"
 
 
+@overload
+def _naive_utc(dt: datetime.datetime) -> datetime.datetime: ...
+@overload
+def _naive_utc(dt: None) -> None: ...
 def _naive_utc(dt: datetime.datetime | None) -> datetime.datetime | None:
     """SQLite round-trips datetimes as tz-naive; our `now` is tz-aware.
     Normalise both to naive-UTC before any arithmetic."""
@@ -134,8 +139,7 @@ def _posted_age_and_recency(
         if dt.tzinfo is not None:
             dt = dt.astimezone(datetime.UTC).replace(tzinfo=None)
         now_naive = _naive_utc(now)
-        age = max((now_naive - dt).days, 0)
-        return age, dt.timestamp()
+        return max((now_naive - dt).days, 0), dt.timestamp()
     age = _parse_card_age_days(text)
     if age is None:
         return None, float("-inf")
@@ -304,7 +308,7 @@ def build_digest(
     # recency DESC (posted date/time, NOT first_seen_at), then
     # first_seen_at DESC as a final deterministic tie-break. Eligibility
     # gates above are unchanged; this only orders the survivors.
-    def _rank_key(t: tuple[int, Job, MatchResult]) -> tuple[int, float, float, float]:
+    def _rank_key(t: tuple[int, Job, MatchResult]) -> tuple[float, float, float, float]:
         _canon, job, mr = t
         age, recency = _posted_age_and_recency(job.posted_date_text, now)
         first_seen_ts = job.first_seen_at.timestamp() if job.first_seen_at else 0.0

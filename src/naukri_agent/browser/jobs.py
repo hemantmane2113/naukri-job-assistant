@@ -335,8 +335,7 @@ def _ld_skills(ld: dict | None) -> list[str] | None:
     raw = ld.get("skills")
     if not isinstance(raw, list):
         return None
-    cleaned = [_clean(s) for s in raw if isinstance(s, str)]
-    cleaned = [s for s in cleaned if s]
+    cleaned = [c for c in (_clean(s) for s in raw if isinstance(s, str)) if c]
     return cleaned or None
 
 

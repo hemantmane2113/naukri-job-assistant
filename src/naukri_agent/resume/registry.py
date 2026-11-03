@@ -16,6 +16,8 @@ from pathlib import Path
 import yaml
 from pydantic import BaseModel, Field, field_validator, model_validator
 
+from naukri_agent.errors import ConfigFileNotFound
+
 _ALLOWED_EXTENSIONS = {".pdf", ".docx"}
 
 
@@ -77,7 +79,7 @@ def load_resume_registry(path: str | Path) -> ResumeRegistry:
     """
     path = Path(path)
     if not path.exists():
-        raise FileNotFoundError(
+        raise ConfigFileNotFound(
             f"Resume registry not found at {path}. Copy "
             "config/resumes.example.yaml to that path and list your "
             "own resume files."

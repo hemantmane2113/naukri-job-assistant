@@ -110,7 +110,7 @@ def _handle_login_challenge(
     page: Any,
     out_dir: Path,
     exc: NaukriAutomationError,
-    wait_for_manual_completion: Callable[[str], None],
+    wait_for_manual_completion: Callable[[str], object],
 ) -> LoginResult:
     """
     Human-in-the-loop pause for a CAPTCHA/MFA challenge hit during
@@ -160,7 +160,7 @@ def _handle_login_challenge(
 def run_inspection(
     settings: Settings,
     search_query: str = "data scientist",
-    wait_for_manual_completion: Callable[[str], None] | None = None,
+    wait_for_manual_completion: Callable[[str], object] | None = None,
 ) -> dict:
     """
     Run Stage 1's read-only sequence end to end.

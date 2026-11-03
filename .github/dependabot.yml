@@ -1,0 +1,13 @@
+version: 2
+updates:
+  # Newer versions of the libraries the project uses (requirements*.lock and pyproject.toml).
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+  # Newer versions of the helper actions that CI uses.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"

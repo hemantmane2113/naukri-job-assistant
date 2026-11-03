@@ -1311,7 +1311,7 @@ def extract_application_ui(page: Any) -> ApplyUiInspection:
     submit_count = sum(1 for c in controls if c.looks_like_final_submit)
     question_count = sum(1 for c in controls if c.looks_like_question)
 
-    notes: list[str] = []
+    notes = []
     if not controls:
         notes.append("Application root found but contained no input/select/textarea/button elements.")
     if resume_count == 0:
@@ -1490,8 +1490,8 @@ def run_apply_inspection(
     *,
     isolated_profile: bool = True,
     allow_apply_init: bool = True,
-    wait_for_manual_apply: Callable[[str], None] | None = None,
-    wait_for_manual_completion: Callable[[str], None] | None = None,
+    wait_for_manual_apply: Callable[[str], object] | None = None,
+    wait_for_manual_completion: Callable[[str], object] | None = None,
 ) -> dict:
     """
     Run the Stage 1.5 controlled post-Apply inspection end to end.

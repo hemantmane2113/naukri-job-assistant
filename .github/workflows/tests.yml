@@ -29,6 +29,8 @@ jobs:
           python -m pip install --no-deps -e .
       - name: Lint (real mistakes only)
         run: python -m ruff check src tests
+      - name: Type check
+        run: python -m mypy
       - name: Run the tests
         # No real browser, network or Naukri account is needed; tests marked "manual" are excluded by default.
         run: python -m pytest -q

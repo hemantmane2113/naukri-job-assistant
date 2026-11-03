@@ -44,7 +44,7 @@ class FetchError(RuntimeError):
     """The page could not be fetched (network, status, type)."""
 
 
-def _is_public(ip: ipaddress._BaseAddress) -> bool:
+def _is_public(ip: ipaddress.IPv4Address | ipaddress.IPv6Address) -> bool:
     return bool(ip.is_global) and not (ip.is_multicast or ip.is_reserved or ip.is_loopback or ip.is_link_local)
 
 

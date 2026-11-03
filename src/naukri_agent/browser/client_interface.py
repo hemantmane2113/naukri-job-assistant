@@ -80,8 +80,9 @@ class JobBoardClient(ABC):
         submitting anything."""
 
     @abstractmethod
-    def submit_answer(self, control_id: str, answer: str) -> None:
-        """Submit one human-approved answer for the given question."""
+    def submit_answer(self, control_id: str, answer: str) -> str:
+        """Submit one human-approved answer for the given question. Returns what the form did next
+        ("next", "closed", "timeout" or "skipped")."""
 
     @abstractmethod
     def skip_question(self, control_id: str) -> None:

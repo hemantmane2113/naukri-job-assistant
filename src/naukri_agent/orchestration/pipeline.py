@@ -289,6 +289,7 @@ def run_daily_recommendations(
                 reused_cached = cached is not None and cached.source_content_fingerprint == job.content_fingerprint
 
                 if reused_cached:
+                    assert cached is not None  # reused_cached is only True when a cached extraction exists
                     extraction_row = cached
                     seq += 1
                     add_run_event(session, daily_run_id=run_id, seq=seq, stage="parse",

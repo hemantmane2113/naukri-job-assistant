@@ -16,6 +16,8 @@ from pathlib import Path
 import yaml
 from pydantic import BaseModel, Field, model_validator
 
+from naukri_agent.errors import ConfigFileNotFound
+
 
 class WorkExperience(BaseModel):
     company: str
@@ -108,7 +110,7 @@ def load_master_resume(path: str | Path) -> MasterResume:
     """
     path = Path(path)
     if not path.exists():
-        raise FileNotFoundError(
+        raise ConfigFileNotFound(
             f"Master resume not found at {path}. Copy "
             "config/master_resume.example.yaml to that path and fill "
             "in your own career history."

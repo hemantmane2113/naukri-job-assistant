@@ -22,7 +22,7 @@ def _secret_values(settings: Any) -> list[str]:
     for name in fields:
         if not any(word in name.lower() for word in _SECRET_WORDS):
             continue
-        value = getattr(settings, name, None)
+        value: Any = getattr(settings, name, None)
         if hasattr(value, "get_secret_value"):
             value = value.get_secret_value()
         if isinstance(value, str) and len(value) >= _MIN_SECRET_LEN:

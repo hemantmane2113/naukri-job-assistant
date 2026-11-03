@@ -149,7 +149,7 @@ OpenAI (optional), OpenPyXL (Excel), APScheduler (optional), the Telegram Bot AP
 pytest
 ```
 
-The default run uses fake browser pages and needs no network or credentials: currently **1,773 passed, 3 deselected**. Tests
+The default run uses fake browser pages and needs no network or credentials: over 1,700 tests, all passing. Tests
 that need a real Naukri account are marked `manual` and are excluded unless you run `pytest -m manual`.
 
 ## Status and limits

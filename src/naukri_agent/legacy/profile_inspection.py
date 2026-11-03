@@ -135,7 +135,7 @@ def run_profile_edit_inspection(
     settings: Settings,
     *,
     isolated_profile: bool = True,
-    wait_for_manual_completion: Callable[[str], None] | None = None,
+    wait_for_manual_completion: Callable[[str], object] | None = None,
     capture_after_manual_open: bool = False,
 ) -> dict:
     """

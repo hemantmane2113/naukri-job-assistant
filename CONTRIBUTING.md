@@ -39,6 +39,8 @@ cp .env.example .env              # a dummy .env is enough to run the tests
 pytest
 ```
 
+The checks CI also runs are `python -m ruff check src tests` (real mistakes only) and `python -m mypy` (types; no issues allowed).
+
 The default test run uses fake browser pages and needs no network, credentials or Naukri account. Tests marked `manual` (under
 `tests/manual/`) need a real account and are excluded unless you run `pytest -m manual`.
 

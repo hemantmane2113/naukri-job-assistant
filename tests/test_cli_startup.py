@@ -49,3 +49,31 @@ def test_scheduler_command_delegates_to_run_scheduler(monkeypatch):
 
     assert result.exit_code == 0
     assert calls == ["fake-settings"]
+
+
+def test_a_missing_personal_config_file_is_one_clear_line_not_a_traceback(monkeypatch, capsys):
+    from naukri_agent.errors import ConfigFileNotFound
+
+    def _cli_that_needs_a_profile():
+        raise ConfigFileNotFound(
+            "Candidate profile not found at config/candidate_profile.yaml. Copy "
+            "config/candidate_profile.example.yaml to that path and fill in your own details."
+        )
+
+    monkeypatch.setattr(cli_main, "cli", _cli_that_needs_a_profile)
+    monkeypatch.setattr(cli_main, "setup_logging", lambda settings: None)
+
+    with pytest.raises(SystemExit) as exc_info:
+        cli_main.main()
+
+    assert exc_info.value.code == 1
+    err = capsys.readouterr().err
+    assert "Candidate profile not found" in err and "naukri-agent doctor" in err
+    assert "Traceback" not in err
+
+
+def test_other_missing_files_still_raise_normally(monkeypatch):
+    monkeypatch.setattr(cli_main, "cli", lambda: (_ for _ in ()).throw(FileNotFoundError("some other file")))
+    monkeypatch.setattr(cli_main, "setup_logging", lambda settings: None)
+    with pytest.raises(FileNotFoundError):
+        cli_main.main()

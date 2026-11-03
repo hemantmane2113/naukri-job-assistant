@@ -137,7 +137,9 @@ def gather_status(
             pass
     try:
         if ready_fn is None:
-            from naukri_agent.orchestration.telegram_listener import ready_summary as ready_fn
+            from naukri_agent.orchestration.telegram_listener import ready_summary
+
+            ready_fn = ready_summary
         out["ready"], out["remaining"], out["cap"] = ready_fn(settings, now)
     except Exception as exc:  # noqa: BLE001 - a busy database is common while the run works
         logger.info("alive message: could not read the ready jobs: %s", type(exc).__name__)

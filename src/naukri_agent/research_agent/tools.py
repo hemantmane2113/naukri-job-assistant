@@ -18,10 +18,9 @@ from __future__ import annotations
 
 import json
 from dataclasses import dataclass
-from typing import Callable
+from typing import Any, Callable
 
 from naukri_agent.research_agent.web import (
-    BraveSearch,
     FetchedPage,
     FetchError,
     SearchError,
@@ -103,7 +102,7 @@ class ToolBox:
         *,
         job: dict,
         limits: Limits | None = None,
-        search: BraveSearch | None = None,
+        search: Any = None,
         fetch: Callable[[str], FetchedPage],
         read_company: Callable[[], dict] | None = None,
     ) -> None:
@@ -191,8 +190,9 @@ class ToolBox:
         for link in data.get("links", []):
             self._remember(link)
         out = {k: data.get(k) for k in ("title", "rating", "reviews", "locations", "text") if data.get(k) is not None}
-        if isinstance(out.get("text"), str):
-            out["text"] = out["text"][:2000]
+        text = out.get("text")
+        if isinstance(text, str):
+            out["text"] = text[:2000]
         return out
 
     def _web_search(self, args: dict) -> dict:

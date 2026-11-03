@@ -54,6 +54,8 @@ class GroqChatClient:
                 if "tool_use_failed" in str(exc):
                     raise ToolUseFailed(name) from exc
                 raise AgentLLMError(name) from exc
+        if response is None:  # every attempt raised above, so this cannot happen; keeps the loop honest
+            raise AgentLLMError("no response")
         try:
             message = response.choices[0].message
             calls = [

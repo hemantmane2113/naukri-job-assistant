@@ -128,6 +128,10 @@ message (10:50) by `phone-guard`.
   **UNVERIFIED against live Naukri:** this whole flow has only run against scripted copies of the real page (the `li.botItem`,
   choice-label and text-box selectors are verified from the saved 10 Oct panel); the first real use will tell. Do not test it by
   pressing Apply on the account.
+- **`run_auto_apply` is a thin driver; the work is in `_ApplyRun`'s steps** (`auto_apply_runner.py`): `_check_page`, `_await_approval`,
+  `_put_resume_on_profile`, `_open_form`, `_collect_answers`, `_send_answers`, `_confirm`, with `_handle_failure` for any surprise. Each step
+  returns `None` (carry on), `_NEXT_JOB` (this job is finished or skipped) or `_STOP` (end the run); keep that contract when adding a step.
+  It used to be one 361-line function; the ruff complexity ceiling in `pyproject.toml` stops that happening again.
 - **The network guard stays armed for the rest of a browser session** after the first application form is opened, and it also blocks
   the resume UPLOAD (21 Oct: Contoso Talent's resume change failed; the log shows `BLOCKED ... filevalidation.naukri.com/file`). So before
   a resume change in a session that has already opened a form, the runner starts a fresh browser (`session_armed`). A resume change
@@ -142,7 +146,7 @@ message (10:50) by `phone-guard`.
 ## Testing
 
 Three tiers: unit; mocked-browser (`test_browser_*.py`, no real browser); manual (`pytest -m manual`, excluded by default). Run
-`pytest` before calling a change done. Also run `ruff check src tests` (real mistakes only; CI runs it too). Currently **1773 passed, 3 deselected**. A fix for a live bug gets a test built from the
+`pytest` before calling a change done. Also run `ruff check src tests` (real mistakes only) and `python -m mypy` (must report no issues); CI runs both. Currently **1775 passed, 3 deselected**. A fix for a live bug gets a test built from the
 real shape that failed (see `tests/test_choice_questions.py` for the Globex panel).
 
 ## Working style the user expects

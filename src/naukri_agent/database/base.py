@@ -11,7 +11,7 @@ from __future__ import annotations
 
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Iterator
+from typing import Any, Iterator
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
@@ -32,7 +32,7 @@ def make_engine(settings: Settings):
     check_same_thread=False, since the pipeline may touch the session
     from a scheduler thread as well as the CLI.
     """
-    connect_args = {}
+    connect_args: dict[str, Any] = {}
     if settings.database_url.startswith("sqlite"):
         db_path = settings.database_url.removeprefix("sqlite:///")
         if db_path and db_path != ":memory:":

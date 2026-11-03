@@ -47,7 +47,7 @@ def _address_in(body: bytes | str | None) -> str | None:
         url = node.get("applyRedirectUrl") if isinstance(node, dict) else None
     except Exception:  # noqa: BLE001 - not the JSON we are looking for
         return None
-    return url.strip() if _is_company_address(url) else None
+    return url.strip() if isinstance(url, str) and _is_company_address(url) else None
 
 
 class ApplyLinkWatcher:

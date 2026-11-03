@@ -30,6 +30,12 @@ has no tagged releases yet, so entries are grouped by date, newest first.
 - Pinned dependencies (`requirements.lock`, `requirements-dev.lock`, for Python 3.12+ on any platform); CI installs from them and
   a weekly run also tries the newest allowed versions.
 - Test setup now closes the SQLite connections each test opens, which removes about 575 "unclosed database" warnings.
+- The apply runner's one 361-line function (`run_auto_apply`, complexity 59) is now a short driver over small steps (largest 83 lines,
+  complexity 12), with no change in behaviour: all apply tests pass unchanged. A lint ceiling on complexity keeps it that way.
+- Dependabot weekly update checks for the libraries and the CI helper actions.
+- A type check (`mypy`, no issues across all of `src`) in CI; fixing it also corrected a few annotations that were wrong, such as
+  `submit_answer` returning the form's reply.
+- A clear one-line message, instead of a traceback, when a personal config file (profile, resume, resume list) is missing.
 - A lint check (real mistakes only) in CI and an experimental Linux test job; the few unused imports and variables it found
   were removed.
 - The diagram sources are kept in `workflow-diagrams/sources/` so the pages can be regenerated.
