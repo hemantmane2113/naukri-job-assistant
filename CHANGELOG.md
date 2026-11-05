@@ -46,6 +46,9 @@ has no tagged releases yet, so entries are grouped by date, newest first.
   `https://hemantmane2113.github.io/naukri-job-assistant/`.
 
 ### Fixed
+- Naukri's greeting ("Hi <name>, thank you for showing interest. Kindly answer all the recruiter's questions...") is no longer asked on
+  Telegram as if it were a question; the app waits for the real first question. (4 Nov: it was asked as "Question 1" and the reply went
+  into the real first question.)
 - A slow Naukri profile page no longer stops an apply run: the wait for the profile's sections is 45 seconds instead of 15, and a
   page stuck half-loaded is reloaded once before giving up. (3 Nov: the 15-second wait timed out while putting the right resume on
   the profile, after the Yes tap, and ended the run before anything was applied.)

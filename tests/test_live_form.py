@@ -473,3 +473,40 @@ def test_confirming_a_typed_answer_shows_the_question_and_the_answer_and_says_se
 
 def test_the_setting_is_on_by_default():
     assert Settings(_env_file=None).apply_follow_live_form is True
+
+
+# --- a greeting is not a question (4 Nov, a form that opened with "Hi <name>, thank you for showing interest...") ---------------
+
+GREETING = "Hi Test Person, thank you for showing interest. Kindly answer all the recruiter's questions to successfully apply for the job."
+REAL_QUESTION = "How many years of experience do you have in Machine Learning and describe some of the high impact projects?"
+
+
+class GreetingFirstPage(LivePage):
+    """The greeting is on screen first; the real question appears after `polls_before_question` looks."""
+
+    def __init__(self, polls_before_question):
+        super().__init__([text_screen(GREETING), text_screen(GREETING, REAL_QUESTION)])
+        self.polls_left = polls_before_question
+
+    def wait_for_timeout(self, ms):
+        super().wait_for_timeout(ms)
+        self.polls_left -= 1
+        if self.polls_left <= 0:
+            self.i = 1
+
+
+def test_the_greeting_alone_is_not_taken_for_the_question():
+    assert ApplyWorkflowSession._question_from(text_screen(GREETING)) is None
+    s, _ = session(text_screen(GREETING))
+    assert s.read_live_question(wait_ms=600)[0] == "timeout"  # no question yet: nothing to ask the person
+
+
+def test_the_question_after_the_greeting_is_the_one_asked():
+    live = ApplyWorkflowSession._question_from(text_screen(GREETING, REAL_QUESTION))
+    assert live is not None and live.text == REAL_QUESTION and live.kind == "text"
+
+
+def test_when_the_real_question_appears_a_moment_after_the_greeting_that_is_what_the_reader_returns():
+    s = ApplyWorkflowSession(GreetingFirstPage(polls_before_question=3))
+    state, live = s.read_live_question(wait_ms=5000)
+    assert state == "question" and live.text == REAL_QUESTION

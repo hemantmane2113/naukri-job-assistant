@@ -87,6 +87,11 @@ app reopens it and sends your saved answer. Anything unexpected sends nothing an
 Limits: at most 4 applications per rolling 24 hours, only jobs that score 80 or more with a Naukri Apply button, never contract
 or temporary jobs. Pause with `data/PAUSE_AUTO_APPLY`.
 
+**The evening reminder** lists the Naukri Apply jobs still waiting and when each leaves the list; it is silent when none are. It is
+sent once a day at `APPLY_REMINDER_TIME` (default 19:00; for example `APPLY_REMINDER_TIME=22:00` in `.env`), which must be earlier
+than `TELEGRAM_LISTENER_AWAKE_UNTIL` (default 23:00). Restart the phone listener (stop and start the "Naukri Agent - Phone Control"
+task) after changing it. `APPLY_REMINDER_ENABLED=false` turns it off.
+
 ### Keeping phone control alive while you are away
 
 Windows ends the listener's task whenever the PC sleeps or the network blips. Three things keep it running:

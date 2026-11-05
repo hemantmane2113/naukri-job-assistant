@@ -84,6 +84,10 @@ _FIRST_LOOK_ABSENT_POLLS = 16
 # waiting on is the last message that is NOT one of these (the saved panel of 2026-10-10 shows it replying "Sorry! I am not
 # trained to answer this query :(" to an answer typed for a question it had not asked).
 _BOT_NOISE_RE = re.compile(r"sorry|not trained|something went wrong|try again|did(?:n't| not) understand", re.I)
+# Some forms open with a greeting that is not a question. 4 Nov (an ML Engineer job): "Hi <name>, thank you for showing interest.
+# Kindly answer all the recruiter's questions to successfully apply for the job." was asked on Telegram as "Question 1" and the reply
+# was typed into the real first question that appeared a moment later. It is a message of its own (121 characters, no question).
+_BOT_GREETING_RE = re.compile(r"thank you for showing interest|kindly answer all the recruiter", re.I)
 # One look at the open form: the bot's messages in order, the choice labels on screen, and whether the free-text box is showing
 # (its container is hidden while a choice question is on screen). Returns null when there is no question drawer.
 _LIVE_JS = """(a) => {
@@ -305,7 +309,7 @@ class ApplyWorkflowSession:
     def _question_from(snapshot: dict) -> LiveQuestion | None:
         """The question that is waiting for an answer, or None when nothing is (the bot is still typing, or the form is done)."""
         bots = [str(t).strip() for t in snapshot.get("bots", []) if str(t).strip()]
-        question = next((t for t in reversed(bots) if not _BOT_NOISE_RE.search(t)), None)
+        question = next((t for t in reversed(bots) if not _BOT_NOISE_RE.search(t) and not _BOT_GREETING_RE.search(t)), None)
         if not question:
             return None
         options = [o for o in (str(x).strip() for x in snapshot.get("options", [])) if o]
